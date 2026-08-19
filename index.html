@@ -923,6 +923,10 @@
 
     function showHome() {
 
+      /*
+        Save the exact ayah BEFORE currentSurah
+        is cleared.
+      */
       saveReadingPosition();
 
 
@@ -951,19 +955,37 @@
 
 
     /*
-      Custom in-app back button:
-      returns Home directly without calling history.back().
+      CUSTOM ‹ BUTTON
+
+      1. Save progress and show Home directly.
+      2. Replace the current reader history entry
+         with Home.
+
+      This means Safari Forward cannot reopen
+      the Surah that was closed using this button.
     */
     function goHome() {
 
       showHome();
 
+
+      history.replaceState(
+        {
+          screen: "home"
+        },
+        "",
+        window.location.pathname
+      );
+
     }
 
 
     /*
-      Safari Back and the iPhone left-edge swipe
-      are handled here through popstate.
+      SAFARI BACK / LEFT-EDGE SWIPE
+
+      These continue to use browser history.
+      When Safari moves to the Home history entry,
+      popstate fires and showHome() is called.
     */
     window.addEventListener(
       "popstate",
@@ -1058,8 +1080,13 @@
         lastSurah <= 114
       ) {
 
+        /*
+          This creates a fresh reader history
+          entry, just like opening a Surah normally.
+        */
         openSurah(
-          lastSurah
+          lastSurah,
+          true
         );
 
       }
@@ -1069,6 +1096,10 @@
 
     async function startApp() {
 
+      /*
+        Make the initial page a known Home
+        history state.
+      */
       history.replaceState(
         {
           screen: "home"
@@ -1078,6 +1109,10 @@
       );
 
 
+      /*
+        Remove obsolete pixel-based progress
+        from the older reader version.
+      */
       localStorage.removeItem(
         "lastPositionSurah"
       );
