@@ -38,6 +38,10 @@
         sans-serif;
     }
 
+    button {
+      font: inherit;
+    }
+
     .app {
       max-width: 700px;
       margin: auto;
@@ -63,13 +67,47 @@
       margin-bottom: 22px;
     }
 
+    .home-actions {
+      margin-bottom: 22px;
+    }
+
+    .bookmarks-main-button {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+
+      border-radius: 16px;
+      padding: 15px 18px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      cursor: pointer;
+    }
+
+    .bookmarks-main-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .bookmark-count {
+      color: var(--secondary);
+      font-size: 14px;
+    }
+
     .continue-card {
       background: var(--accent);
       color: white;
 
       border-radius: 18px;
       padding: 18px;
-      margin-bottom: 22px;
+      margin-bottom: 14px;
 
       cursor: pointer;
     }
@@ -144,7 +182,8 @@
         serif;
     }
 
-    .reader-top {
+    .reader-top,
+    .bookmarks-top {
       display: flex;
       align-items: center;
       gap: 12px;
@@ -184,7 +223,8 @@
       cursor: pointer;
     }
 
-    .reader-heading {
+    .reader-heading,
+    .bookmarks-heading {
       flex: 1;
     }
 
@@ -200,7 +240,7 @@
       border: 1px solid var(--border);
       border-radius: 18px;
 
-      padding: 22px 18px;
+      padding: 22px 18px 14px;
       margin-bottom: 14px;
 
       scroll-margin-top: 90px;
@@ -237,6 +277,121 @@
       margin-right: 7px;
     }
 
+    .ayah-actions {
+      display: flex;
+      justify-content: flex-start;
+
+      border-top: 1px solid var(--border);
+
+      margin-top: 14px;
+      padding-top: 10px;
+    }
+
+    .bookmark-button {
+      border: 0;
+      background: transparent;
+      color: var(--secondary);
+
+      min-width: 44px;
+      min-height: 44px;
+
+      border-radius: 12px;
+
+      font-size: 24px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      cursor: pointer;
+    }
+
+    .bookmark-button.saved {
+      color: var(--accent);
+    }
+
+    .bookmark-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .bookmark-row {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+
+      padding: 16px;
+
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bookmark-row-main {
+      flex: 1;
+      min-width: 0;
+      cursor: pointer;
+    }
+
+    .bookmark-row-title {
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .bookmark-row-subtitle {
+      margin-top: 4px;
+      color: var(--secondary);
+      font-size: 14px;
+    }
+
+    .bookmark-row-arabic {
+      direction: rtl;
+      margin-top: 8px;
+
+      color: var(--secondary);
+      font-size: 20px;
+
+      font-family:
+        "Geeza Pro",
+        "Noto Naskh Arabic",
+        serif;
+    }
+
+    .bookmark-delete {
+      width: 44px;
+      height: 44px;
+
+      flex-shrink: 0;
+
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--secondary);
+
+      border-radius: 50%;
+
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .empty-bookmarks {
+      text-align: center;
+
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+
+      padding: 32px 20px;
+
+      color: var(--secondary);
+    }
+
+    .empty-bookmarks-symbol {
+      font-size: 36px;
+      margin-bottom: 12px;
+      color: var(--accent);
+    }
+
     .source-footer {
       text-align: center;
       color: var(--secondary);
@@ -267,6 +422,7 @@
         Choose a Surah to begin reading
       </div>
 
+
       <div
         id="continueCard"
         class="continue-card hidden"
@@ -281,6 +437,29 @@
           class="continue-title"
         ></div>
       </div>
+
+
+      <div class="home-actions">
+
+        <button
+          class="bookmarks-main-button"
+          onclick="openBookmarks()"
+        >
+          <span class="bookmarks-main-label">
+            <span>★</span>
+            <span>Bookmarks</span>
+          </span>
+
+          <span
+            id="bookmarkCount"
+            class="bookmark-count"
+          >
+            0
+          </span>
+        </button>
+
+      </div>
+
 
       <div
         id="surahList"
@@ -322,6 +501,36 @@
       </div>
 
       <div id="ayahContainer"></div>
+
+    </section>
+
+
+    <!-- BOOKMARKS SCREEN -->
+    <section
+      id="bookmarksScreen"
+      class="hidden"
+    >
+
+      <div class="bookmarks-top">
+
+        <button
+          class="back-button"
+          onclick="closeBookmarks()"
+          aria-label="Back to Surah list"
+        >
+          ‹
+        </button>
+
+        <div class="bookmarks-heading">
+          <h1>Bookmarks</h1>
+        </div>
+
+      </div>
+
+      <div
+        id="bookmarkList"
+        class="bookmark-list"
+      ></div>
 
     </section>
 
@@ -482,6 +691,9 @@
     const readerScreen =
       document.getElementById("readerScreen");
 
+    const bookmarksScreen =
+      document.getElementById("bookmarksScreen");
+
     const surahList =
       document.getElementById("surahList");
 
@@ -490,6 +702,12 @@
 
     const continueTitle =
       document.getElementById("continueTitle");
+
+    const bookmarkCount =
+      document.getElementById("bookmarkCount");
+
+    const bookmarkList =
+      document.getElementById("bookmarkList");
 
     const readerTitle =
       document.getElementById("readerTitle");
@@ -620,6 +838,240 @@
     }
 
 
+    function getBookmarks() {
+
+      try {
+
+        const saved =
+          localStorage.getItem(
+            "quranBookmarks"
+          );
+
+        if (!saved) {
+          return [];
+        }
+
+
+        const bookmarks =
+          JSON.parse(saved);
+
+
+        if (!Array.isArray(bookmarks)) {
+          return [];
+        }
+
+
+        return bookmarks.filter(
+          bookmark =>
+            bookmark &&
+            Number(bookmark.surah) >= 1 &&
+            Number(bookmark.surah) <= 114 &&
+            Number(bookmark.ayah) >= 1
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Could not read bookmarks:",
+          error
+        );
+
+        return [];
+
+      }
+
+    }
+
+
+    function saveBookmarks(
+      bookmarks
+    ) {
+
+      localStorage.setItem(
+        "quranBookmarks",
+        JSON.stringify(bookmarks)
+      );
+
+
+      updateBookmarkCount();
+
+    }
+
+
+    function isBookmarked(
+      surah,
+      ayah
+    ) {
+
+      const bookmarks =
+        getBookmarks();
+
+
+      return bookmarks.some(
+        bookmark =>
+          Number(bookmark.surah) === Number(surah) &&
+          Number(bookmark.ayah) === Number(ayah)
+      );
+
+    }
+
+
+    function toggleBookmark(
+      surah,
+      ayah
+    ) {
+
+      let bookmarks =
+        getBookmarks();
+
+
+      const index =
+        bookmarks.findIndex(
+          bookmark =>
+            Number(bookmark.surah) === Number(surah) &&
+            Number(bookmark.ayah) === Number(ayah)
+        );
+
+
+      if (index >= 0) {
+
+        bookmarks.splice(
+          index,
+          1
+        );
+
+      } else {
+
+        bookmarks.push({
+          surah: Number(surah),
+          ayah: Number(ayah)
+        });
+
+      }
+
+
+      bookmarks.sort(
+        (a, b) => {
+
+          if (
+            a.surah !== b.surah
+          ) {
+
+            return (
+              a.surah -
+              b.surah
+            );
+
+          }
+
+          return (
+            a.ayah -
+            b.ayah
+          );
+
+        }
+      );
+
+
+      saveBookmarks(
+        bookmarks
+      );
+
+
+      updateAyahBookmarkButton(
+        surah,
+        ayah
+      );
+
+    }
+
+
+    function removeBookmark(
+      surah,
+      ayah
+    ) {
+
+      const bookmarks =
+        getBookmarks()
+          .filter(
+            bookmark =>
+              !(
+                Number(bookmark.surah) === Number(surah) &&
+                Number(bookmark.ayah) === Number(ayah)
+              )
+          );
+
+
+      saveBookmarks(
+        bookmarks
+      );
+
+
+      renderBookmarks();
+
+    }
+
+
+    function updateBookmarkCount() {
+
+      const bookmarks =
+        getBookmarks();
+
+
+      bookmarkCount.textContent =
+        bookmarks.length === 1
+          ? "1 saved"
+          : bookmarks.length + " saved";
+
+    }
+
+
+    function updateAyahBookmarkButton(
+      surah,
+      ayah
+    ) {
+
+      const button =
+        document.querySelector(
+          `.bookmark-button[data-surah="${surah}"][data-ayah="${ayah}"]`
+        );
+
+
+      if (!button) {
+        return;
+      }
+
+
+      const saved =
+        isBookmarked(
+          surah,
+          ayah
+        );
+
+
+      button.textContent =
+        saved
+          ? "★"
+          : "☆";
+
+
+      button.classList.toggle(
+        "saved",
+        saved
+      );
+
+
+      button.setAttribute(
+        "aria-label",
+        saved
+          ? `Remove bookmark for Surah ${surah}, Ayah ${ayah}`
+          : `Bookmark Surah ${surah}, Ayah ${ayah}`
+      );
+
+    }
+
+
     function buildHome() {
 
       surahList.innerHTML =
@@ -637,12 +1089,16 @@
               "div"
             );
 
+
           row.className =
             "surah-row";
 
 
           row.onclick =
-            () => openSurah(number);
+            () =>
+              openSurah(
+                number
+              );
 
 
           row.innerHTML = `
@@ -679,13 +1135,15 @@
 
 
       updateContinueCard();
+      updateBookmarkCount();
 
     }
 
 
     function openSurah(
       number,
-      addHistory = true
+      addHistory = true,
+      targetAyah = null
     ) {
 
       if (!quranLoaded) {
@@ -699,26 +1157,40 @@
       }
 
 
-      currentSurah =
-        number;
+      const surah =
+        surahs[number - 1];
 
 
-      if (addHistory) {
+      if (!surah) {
+        return;
+      }
 
-        history.pushState(
-          {
-            screen: "reader",
-            surah: number
-          },
-          "",
-          "#surah-" + number
-        );
+
+      let openingAyah =
+        Number(targetAyah);
+
+
+      if (
+        !openingAyah ||
+        openingAyah < 1 ||
+        openingAyah > surah[3]
+      ) {
+
+        openingAyah =
+          Number(
+            localStorage.getItem(
+              "lastAyah_" + number
+            )
+          ) || 1;
 
       }
 
 
-      const surah =
-        surahs[number - 1];
+      currentSurah =
+        number;
+
+      currentAyah =
+        openingAyah;
 
 
       localStorage.setItem(
@@ -727,7 +1199,35 @@
       );
 
 
+      localStorage.setItem(
+        "lastAyah_" + number,
+        openingAyah
+      );
+
+
+      if (addHistory) {
+
+        history.pushState(
+          {
+            screen: "reader",
+            surah: number,
+            ayah: openingAyah
+          },
+          "",
+          "#surah-" +
+            number +
+            "-ayah-" +
+            openingAyah
+        );
+
+      }
+
+
       homeScreen.classList.add(
+        "hidden"
+      );
+
+      bookmarksScreen.classList.add(
         "hidden"
       );
 
@@ -757,16 +1257,29 @@
       verses.forEach(
         (verse, index) => {
 
+          const ayahNumber =
+            index + 1;
+
+
           const ayah =
             document.createElement(
               "article"
             );
 
+
           ayah.className =
             "ayah";
 
+
           ayah.dataset.ayah =
-            index + 1;
+            ayahNumber;
+
+
+          const saved =
+            isBookmarked(
+              number,
+              ayahNumber
+            );
 
 
           ayah.innerHTML = `
@@ -776,8 +1289,27 @@
               ${verse}
 
               <span class="ayah-number">
-                ${index + 1}
+                ${ayahNumber}
               </span>
+
+            </div>
+
+
+            <div class="ayah-actions">
+
+              <button
+                class="bookmark-button ${saved ? "saved" : ""}"
+                data-surah="${number}"
+                data-ayah="${ayahNumber}"
+                onclick="toggleBookmark(${number}, ${ayahNumber})"
+                aria-label="${
+                  saved
+                    ? `Remove bookmark for Surah ${number}, Ayah ${ayahNumber}`
+                    : `Bookmark Surah ${number}, Ayah ${ayahNumber}`
+                }"
+              >
+                ${saved ? "★" : "☆"}
+              </button>
 
             </div>
 
@@ -792,23 +1324,11 @@
       );
 
 
-      const savedAyah =
-        Number(
-          localStorage.getItem(
-            "lastAyah_" + number
-          )
-        ) || 1;
-
-
-      currentAyah =
-        savedAyah;
-
-
       setTimeout(() => {
 
         const target =
           document.querySelector(
-            `.ayah[data-ayah="${savedAyah}"]`
+            `.ayah[data-ayah="${openingAyah}"]`
           );
 
 
@@ -852,7 +1372,8 @@
 
 
       let visibleAyah =
-        1;
+        currentAyah || 1;
+
 
       const readingLine =
         180;
@@ -900,6 +1421,27 @@
         currentAyah
       );
 
+
+      if (
+        history.state &&
+        history.state.screen === "reader"
+      ) {
+
+        history.replaceState(
+          {
+            screen: "reader",
+            surah: currentSurah,
+            ayah: currentAyah
+          },
+          "",
+          "#surah-" +
+            currentSurah +
+            "-ayah-" +
+            currentAyah
+        );
+
+      }
+
     }
 
 
@@ -910,6 +1452,7 @@
         clearTimeout(
           scrollTimer
         );
+
 
         scrollTimer =
           setTimeout(
@@ -923,10 +1466,6 @@
 
     function showHome() {
 
-      /*
-        Save the exact ayah BEFORE currentSurah
-        is cleared.
-      */
       saveReadingPosition();
 
 
@@ -935,6 +1474,10 @@
 
 
       readerScreen.classList.add(
+        "hidden"
+      );
+
+      bookmarksScreen.classList.add(
         "hidden"
       );
 
@@ -950,20 +1493,11 @@
 
 
       updateContinueCard();
+      updateBookmarkCount();
 
     }
 
 
-    /*
-      CUSTOM ‹ BUTTON
-
-      1. Save progress and show Home directly.
-      2. Replace the current reader history entry
-         with Home.
-
-      This means Safari Forward cannot reopen
-      the Surah that was closed using this button.
-    */
     function goHome() {
 
       showHome();
@@ -980,13 +1514,194 @@
     }
 
 
-    /*
-      SAFARI BACK / LEFT-EDGE SWIPE
+    function openBookmarks(
+      addHistory = true
+    ) {
 
-      These continue to use browser history.
-      When Safari moves to the Home history entry,
-      popstate fires and showHome() is called.
-    */
+      saveReadingPosition();
+
+
+      currentSurah =
+        null;
+
+
+      if (addHistory) {
+
+        history.pushState(
+          {
+            screen: "bookmarks"
+          },
+          "",
+          "#bookmarks"
+        );
+
+      }
+
+
+      homeScreen.classList.add(
+        "hidden"
+      );
+
+      readerScreen.classList.add(
+        "hidden"
+      );
+
+      bookmarksScreen.classList.remove(
+        "hidden"
+      );
+
+
+      renderBookmarks();
+
+
+      window.scrollTo(
+        0,
+        0
+      );
+
+    }
+
+
+    function closeBookmarks() {
+
+      showHome();
+
+
+      history.replaceState(
+        {
+          screen: "home"
+        },
+        "",
+        window.location.pathname
+      );
+
+    }
+
+
+    function renderBookmarks() {
+
+      const bookmarks =
+        getBookmarks();
+
+
+      bookmarkList.innerHTML =
+        "";
+
+
+      updateBookmarkCount();
+
+
+      if (!bookmarks.length) {
+
+        bookmarkList.innerHTML = `
+
+          <div class="empty-bookmarks">
+
+            <div class="empty-bookmarks-symbol">
+              ☆
+            </div>
+
+            <strong>
+              No bookmarks yet
+            </strong>
+
+            <br><br>
+
+            Open a Surah and tap the
+            ☆ button beneath any ayah
+            to save it here.
+
+          </div>
+
+        `;
+
+
+        return;
+
+      }
+
+
+      bookmarks.forEach(
+        bookmark => {
+
+          const surah =
+            surahs[
+              bookmark.surah - 1
+            ];
+
+
+          if (!surah) {
+            return;
+          }
+
+
+          const row =
+            document.createElement(
+              "div"
+            );
+
+
+          row.className =
+            "bookmark-row";
+
+
+          row.innerHTML = `
+
+            <div
+              class="bookmark-row-main"
+              onclick="openBookmark(${bookmark.surah}, ${bookmark.ayah})"
+            >
+
+              <div class="bookmark-row-title">
+                ${surah[0]} · Ayah ${bookmark.ayah}
+              </div>
+
+              <div class="bookmark-row-subtitle">
+                Surah ${bookmark.surah}
+              </div>
+
+              <div class="bookmark-row-arabic">
+                ${surah[2]}
+              </div>
+
+            </div>
+
+
+            <button
+              class="bookmark-delete"
+              onclick="removeBookmark(${bookmark.surah}, ${bookmark.ayah})"
+              aria-label="Remove ${surah[0]} Ayah ${bookmark.ayah} bookmark"
+            >
+              ×
+            </button>
+
+          `;
+
+
+          bookmarkList.appendChild(
+            row
+          );
+
+        }
+      );
+
+    }
+
+
+    function openBookmark(
+      surah,
+      ayah
+    ) {
+
+      openSurah(
+        surah,
+        true,
+        ayah
+      );
+
+    }
+
+
     window.addEventListener(
       "popstate",
       event => {
@@ -1002,10 +1717,28 @@
             );
 
 
+          const ayah =
+            Number(
+              event.state.ayah
+            ) || null;
+
+
           openSurah(
             surah,
+            false,
+            ayah
+          );
+
+
+        } else if (
+          event.state &&
+          event.state.screen === "bookmarks"
+        ) {
+
+          openBookmarks(
             false
           );
+
 
         } else {
 
@@ -1054,6 +1787,7 @@
           " · Ayah " +
           lastAyah;
 
+
       } else {
 
         continueCard.classList.add(
@@ -1080,13 +1814,18 @@
         lastSurah <= 114
       ) {
 
-        /*
-          This creates a fresh reader history
-          entry, just like opening a Surah normally.
-        */
+        const lastAyah =
+          Number(
+            localStorage.getItem(
+              "lastAyah_" + lastSurah
+            )
+          ) || 1;
+
+
         openSurah(
           lastSurah,
-          true
+          true,
+          lastAyah
         );
 
       }
@@ -1096,10 +1835,6 @@
 
     async function startApp() {
 
-      /*
-        Make the initial page a known Home
-        history state.
-      */
       history.replaceState(
         {
           screen: "home"
@@ -1109,10 +1844,6 @@
       );
 
 
-      /*
-        Remove obsolete pixel-based progress
-        from the older reader version.
-      */
       localStorage.removeItem(
         "lastPositionSurah"
       );
@@ -1123,6 +1854,7 @@
 
 
       await loadQuran();
+
 
       buildHome();
 
