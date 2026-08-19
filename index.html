@@ -687,7 +687,7 @@
     }
 
 
-    function openSurah(number) {
+    function openSurah(number, addHistory = true) {
 
       if (!quranLoaded) {
 
@@ -703,6 +703,18 @@
       currentSurah =
         number;
 
+    if (addHistory) {
+
+      history.pushState(
+        {
+          screen: "reader",
+          surah: number
+        },
+        "",
+        "#surah-" + number
+      );
+
+    }
 
       const surah =
         surahs[number - 1];
@@ -912,7 +924,75 @@
     );
 
 
-    function goHome() {
+        function showHome() {
+
+          saveReadingPosition();
+
+          currentSurah =
+            null;
+
+
+          readerScreen.classList.add(
+            "hidden"
+          );
+
+          homeScreen.classList.remove(
+            "hidden"
+          );
+
+
+          window.scrollTo(
+            0,
+            0
+          );
+
+
+          updateContinueCard();
+
+        }
+
+
+        function goHome() {
+
+          if (currentSurah) {
+
+            history.back();
+
+          } else {
+
+            showHome();
+
+          }
+
+        }
+
+        window.addEventListener(
+          "popstate",
+          event => {
+
+            if (
+              event.state &&
+              event.state.screen === "reader"
+            ) {
+
+              const surah =
+                Number(
+                  event.state.surah
+                );
+
+              openSurah(
+                surah,
+                false
+              );
+
+            } else {
+
+              showHome();
+
+            }
+
+          }
+        );
 
       saveReadingPosition();
 
@@ -1014,6 +1094,14 @@
 
 
     async function startApp() {
+
+        history.replaceState(
+          {
+            screen: "home"
+          },
+          "",
+          window.location.pathname
+        );
 
       localStorage.removeItem(
         "lastPositionSurah"
