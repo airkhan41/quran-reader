@@ -229,6 +229,19 @@
 
       padding: 30px 20px;
     }
+    
+    .source-footer {
+      text-align: center;
+      color: var(--secondary);
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 35px;
+      padding: 20px;
+    }
+    
+    .source-footer a {
+      color: var(--accent);
+    }
   </style>
 </head>
 
@@ -301,7 +314,25 @@
       <div id="ayahContainer"></div>
 
     </section>
-
+    
+    <footer class="source-footer">
+    
+      Quran text source:
+      <a
+        href="https://tanzil.net"
+        target="_blank"
+        rel="noopener"
+      >
+        Tanzil Project
+      </a>
+    
+      <br>
+    
+      Tanzil Quran Text
+      © 2007–2021 Tanzil Project
+    
+    </footer>
+  
   </main>
 
 
@@ -425,20 +456,100 @@
     ];
 
 
-    const quranText = {
+    let quranText = {};
+    let quranLoaded = false;
 
-      1: [
-        "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
-        "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
-        "الرَّحْمَٰنِ الرَّحِيمِ",
-        "مَالِكِ يَوْمِ الدِّينِ",
-        "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
-        "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ",
-        "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ"
-      ]
-
-    };
-
+    let currentSurah = null;
+    
+    async function loadQuran() {
+    
+      try {
+    
+        const response =
+          await fetch("quran-uthmani.txt");
+    
+        if (!response.ok) {
+          throw new Error(
+            "Could not load Quran text."
+          );
+        }
+    
+        const text =
+          await response.text();
+    
+        const verses =
+          text
+            .replace(/\r/g, "")
+            .split("\n")
+            .filter(line =>
+              line.trim() !== ""
+            );
+    
+    
+        if (verses.length !== 6236) {
+    
+          throw new Error(
+            "Expected 6236 ayat but found " +
+            verses.length
+          );
+    
+        }
+    
+    
+        let position = 0;
+    
+    
+        surahs.forEach(
+          (surah, index) => {
+    
+            const surahNumber =
+              index + 1;
+    
+            const ayahCount =
+              surah[3];
+    
+            quranText[surahNumber] =
+              verses.slice(
+                position,
+                position + ayahCount
+              );
+    
+            position += ayahCount;
+    
+          }
+        );
+    
+    
+        if (position !== 6236) {
+    
+          throw new Error(
+            "Surah indexing did not total 6236 ayat."
+          );
+    
+        }
+    
+    
+        quranLoaded = true;
+    
+        console.log(
+          "Quran loaded successfully:",
+          position,
+          "ayat"
+        );
+    
+    
+      } catch (error) {
+    
+        console.error(error);
+    
+        alert(
+          "The Quran text could not be loaded. " +
+          "Please check quran-uthmani.txt."
+        );
+    
+      }
+    
+    }
 
     const homeScreen =
       document.getElementById("homeScreen");
@@ -518,6 +629,16 @@
 
 
     function openSurah(number) {
+      
+      if (!quranLoaded) {
+      
+        alert(
+          "Quran text is still loading. Please try again."
+        );
+      
+        return;
+      
+      }
 
       currentSurah = number;
 
@@ -540,63 +661,45 @@
 
       ayahContainer.innerHTML = "";
 
-      const verses =
+     const verses =
         quranText[number];
 
 
-      if (!verses) {
-
-        ayahContainer.innerHTML = `
-
-          <div class="empty-message">
-
-            <strong>
-              ${surah[0]}
-            </strong>
-
-            <br><br>
-
-            The reader page is working.
-
-            <br><br>
-
-            Quran text for this Surah
-            will be added in the next step.
-
-          </div>
-
-        `;
-
-      } else {
-
-        verses.forEach((verse, index) => {
-
+      verses.forEach(
+        (verse, index) => {
+      
           const ayah =
-            document.createElement("article");
-
-          ayah.className = "ayah";
-
+            document.createElement(
+              "article"
+            );
+      
+          ayah.className =
+            "ayah";
+      
+          ayah.dataset.ayah =
+            index + 1;
+      
           ayah.innerHTML = `
-
+      
             <div class="arabic">
-
+      
               ${verse}
-
+      
               <span class="ayah-number">
                 ${index + 1}
               </span>
-
+      
             </div>
-
+      
           `;
-
-          ayahContainer.appendChild(ayah);
-
-        });
-
-      }
-
-
+      
+          ayahContainer.appendChild(
+            ayah
+          );
+      
+        }
+      );
+      
       const savedSurah =
         Number(
           localStorage.getItem(
@@ -733,7 +836,16 @@
     }
 
 
-    buildHome();
+    async function startApp() {
+    
+      await loadQuran();
+    
+      buildHome();
+    
+    }
+    
+    
+    startApp();
 
   </script>
 
