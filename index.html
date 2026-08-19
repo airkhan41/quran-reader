@@ -8,7 +8,11 @@
     content="width=device-width, initial-scale=1, viewport-fit=cover"
   />
 
-  <meta name="theme-color" content="#f6f3ec" />
+  <meta
+    id="themeColor"
+    name="theme-color"
+    content="#f6f3ec"
+  />
 
   <title>My Quran Reader</title>
 
@@ -24,10 +28,21 @@
       --secondary: #6f7a75;
       --border: #e2ddd2;
       --accent: #315c4b;
+      --arabic-font-size: 34px;
+    }
+
+    body.dark {
+      --background: #111714;
+      --card: #19201d;
+      --text: #f1f5f2;
+      --secondary: #a6b0ab;
+      --border: #303a35;
+      --accent: #8fc1a8;
     }
 
     body {
       margin: 0;
+
       background: var(--background);
       color: var(--text);
 
@@ -36,6 +51,10 @@
         BlinkMacSystemFont,
         "Segoe UI",
         sans-serif;
+
+      transition:
+        background 0.2s ease,
+        color 0.2s ease;
     }
 
     button {
@@ -53,7 +72,7 @@
     }
 
     .hidden {
-      display: none;
+      display: none !important;
     }
 
     h1 {
@@ -65,40 +84,6 @@
       color: var(--secondary);
       margin-top: 6px;
       margin-bottom: 22px;
-    }
-
-    .home-actions {
-      margin-bottom: 22px;
-    }
-
-    .bookmarks-main-button {
-      width: 100%;
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--text);
-
-      border-radius: 16px;
-      padding: 15px 18px;
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      cursor: pointer;
-    }
-
-    .bookmarks-main-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .bookmark-count {
-      color: var(--secondary);
-      font-size: 14px;
     }
 
     .continue-card {
@@ -123,6 +108,39 @@
       font-weight: 600;
     }
 
+    .home-actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .home-action-button {
+      flex: 1;
+
+      background: var(--card);
+      color: var(--text);
+
+      border: 1px solid var(--border);
+      border-radius: 16px;
+
+      min-height: 52px;
+      padding: 12px;
+
+      cursor: pointer;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      font-weight: 600;
+    }
+
+    .bookmark-count {
+      color: var(--secondary);
+      font-size: 13px;
+    }
+
     .surah-list {
       display: flex;
       flex-direction: column;
@@ -135,10 +153,12 @@
       gap: 14px;
 
       background: var(--card);
+
       border: 1px solid var(--border);
       border-radius: 16px;
 
       padding: 15px;
+
       cursor: pointer;
     }
 
@@ -174,6 +194,7 @@
 
     .surah-arabic {
       direction: rtl;
+
       font-size: 24px;
 
       font-family:
@@ -202,7 +223,8 @@
       margin-bottom: 20px;
     }
 
-    .back-button {
+    .back-button,
+    .reader-settings-button {
       background: var(--card);
       color: var(--text);
 
@@ -212,7 +234,6 @@
       border-radius: 50%;
       border: 1px solid var(--border);
 
-      font-size: 28px;
       line-height: 1;
 
       display: flex;
@@ -223,9 +244,18 @@
       cursor: pointer;
     }
 
+    .back-button {
+      font-size: 28px;
+    }
+
+    .reader-settings-button {
+      font-size: 20px;
+    }
+
     .reader-heading,
     .bookmarks-heading {
       flex: 1;
+      min-width: 0;
     }
 
     .reader-arabic-name {
@@ -255,7 +285,7 @@
         "Noto Naskh Arabic",
         serif;
 
-      font-size: 34px;
+      font-size: var(--arabic-font-size);
       line-height: 2;
     }
 
@@ -271,7 +301,10 @@
       border: 1px solid var(--border);
       border-radius: 50%;
 
-      font-family: -apple-system, sans-serif;
+      font-family:
+        -apple-system,
+        sans-serif;
+
       font-size: 12px;
 
       margin-right: 7px;
@@ -292,8 +325,8 @@
       background: transparent;
       color: var(--secondary);
 
-      min-width: 44px;
-      min-height: 44px;
+      width: 44px;
+      height: 44px;
 
       border-radius: 12px;
 
@@ -318,6 +351,7 @@
 
     .bookmark-row {
       background: var(--card);
+
       border: 1px solid var(--border);
       border-radius: 16px;
 
@@ -341,15 +375,18 @@
 
     .bookmark-row-subtitle {
       margin-top: 4px;
+
       color: var(--secondary);
       font-size: 14px;
     }
 
     .bookmark-row-arabic {
       direction: rtl;
+
       margin-top: 8px;
 
       color: var(--secondary);
+
       font-size: 20px;
 
       font-family:
@@ -371,6 +408,7 @@
       border-radius: 50%;
 
       font-size: 20px;
+
       cursor: pointer;
     }
 
@@ -378,6 +416,7 @@
       text-align: center;
 
       background: var(--card);
+
       border: 1px solid var(--border);
       border-radius: 18px;
 
@@ -388,12 +427,211 @@
 
     .empty-bookmarks-symbol {
       font-size: 36px;
+
       margin-bottom: 12px;
+
       color: var(--accent);
+    }
+
+    /* SETTINGS */
+
+    .settings-overlay {
+      position: fixed;
+      inset: 0;
+
+      z-index: 1000;
+
+      background: rgba(0, 0, 0, 0.45);
+
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+
+      padding:
+        16px
+        16px
+        calc(16px + env(safe-area-inset-bottom));
+    }
+
+    .settings-panel {
+      width: 100%;
+      max-width: 700px;
+
+      background: var(--card);
+      color: var(--text);
+
+      border: 1px solid var(--border);
+
+      border-radius: 24px;
+
+      padding: 20px;
+    }
+
+    .settings-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      margin-bottom: 24px;
+    }
+
+    .settings-header h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .settings-close {
+      width: 40px;
+      height: 40px;
+
+      border: 1px solid var(--border);
+      border-radius: 50%;
+
+      background: var(--background);
+      color: var(--text);
+
+      font-size: 22px;
+
+      cursor: pointer;
+    }
+
+    .settings-section {
+      border-top: 1px solid var(--border);
+      padding: 18px 0;
+    }
+
+    .settings-section:first-of-type {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .settings-label {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .settings-description {
+      color: var(--secondary);
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    .font-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .font-control-button {
+      width: 52px;
+      height: 46px;
+
+      border: 1px solid var(--border);
+
+      border-radius: 14px;
+
+      background: var(--background);
+      color: var(--text);
+
+      font-size: 18px;
+      font-weight: 600;
+
+      cursor: pointer;
+    }
+
+    .font-size-value {
+      flex: 1;
+
+      text-align: center;
+
+      color: var(--secondary);
+      font-size: 14px;
+    }
+
+    .theme-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      gap: 16px;
+    }
+
+    .theme-text {
+      flex: 1;
+    }
+
+    .switch {
+      position: relative;
+
+      width: 52px;
+      height: 32px;
+
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+
+      background: var(--border);
+
+      border-radius: 999px;
+
+      cursor: pointer;
+
+      transition: 0.2s;
+    }
+
+    .slider::before {
+      content: "";
+
+      position: absolute;
+
+      width: 26px;
+      height: 26px;
+
+      left: 3px;
+      top: 3px;
+
+      background: white;
+
+      border-radius: 50%;
+
+      transition: 0.2s;
+    }
+
+    .switch input:checked + .slider {
+      background: var(--accent);
+    }
+
+    .switch input:checked + .slider::before {
+      transform: translateX(20px);
+    }
+
+    .reset-button {
+      width: 100%;
+
+      border: 1px solid var(--border);
+
+      border-radius: 14px;
+
+      background: var(--background);
+      color: var(--text);
+
+      padding: 13px;
+
+      cursor: pointer;
     }
 
     .source-footer {
       text-align: center;
+
       color: var(--secondary);
 
       font-size: 12px;
@@ -414,6 +652,7 @@
   <main class="app">
 
     <!-- HOME SCREEN -->
+
     <section id="homeScreen">
 
       <h1>Quran</h1>
@@ -428,6 +667,7 @@
         class="continue-card hidden"
         onclick="continueReading()"
       >
+
         <div class="continue-small">
           Continue Reading
         </div>
@@ -436,26 +676,37 @@
           id="continueTitle"
           class="continue-title"
         ></div>
+
       </div>
 
 
       <div class="home-actions">
 
         <button
-          class="bookmarks-main-button"
+          class="home-action-button"
           onclick="openBookmarks()"
         >
-          <span class="bookmarks-main-label">
-            <span>★</span>
-            <span>Bookmarks</span>
+          <span>★</span>
+
+          <span>
+            Bookmarks
           </span>
 
           <span
             id="bookmarkCount"
             class="bookmark-count"
           >
-            0
+            0 saved
           </span>
+        </button>
+
+
+        <button
+          class="home-action-button"
+          onclick="openSettings()"
+        >
+          <span>⚙︎</span>
+          <span>Settings</span>
         </button>
 
       </div>
@@ -470,6 +721,7 @@
 
 
     <!-- READER SCREEN -->
+
     <section
       id="readerScreen"
       class="hidden"
@@ -485,6 +737,7 @@
           ‹
         </button>
 
+
         <div class="reader-heading">
 
           <h1 id="readerTitle">
@@ -498,7 +751,17 @@
 
         </div>
 
+
+        <button
+          class="reader-settings-button"
+          onclick="openSettings()"
+          aria-label="Reader settings"
+        >
+          ⚙︎
+        </button>
+
       </div>
+
 
       <div id="ayahContainer"></div>
 
@@ -506,6 +769,7 @@
 
 
     <!-- BOOKMARKS SCREEN -->
+
     <section
       id="bookmarksScreen"
       class="hidden"
@@ -521,11 +785,13 @@
           ‹
         </button>
 
+
         <div class="bookmarks-heading">
           <h1>Bookmarks</h1>
         </div>
 
       </div>
+
 
       <div
         id="bookmarkList"
@@ -538,6 +804,7 @@
     <footer class="source-footer">
 
       Quran text source:
+
       <a
         href="https://tanzil.net"
         target="_blank"
@@ -554,6 +821,127 @@
     </footer>
 
   </main>
+
+
+  <!-- SETTINGS PANEL -->
+
+  <div
+    id="settingsOverlay"
+    class="settings-overlay hidden"
+    onclick="closeSettings()"
+  >
+
+    <div
+      class="settings-panel"
+      onclick="event.stopPropagation()"
+    >
+
+      <div class="settings-header">
+
+        <h2>Reader Settings</h2>
+
+        <button
+          class="settings-close"
+          onclick="closeSettings()"
+          aria-label="Close settings"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="settings-section">
+
+        <div class="settings-label">
+          Arabic text size
+        </div>
+
+        <div class="settings-description">
+          Adjust the size of Quranic Arabic text.
+        </div>
+
+
+        <div class="font-controls">
+
+          <button
+            class="font-control-button"
+            onclick="changeArabicFontSize(-2)"
+            aria-label="Decrease Arabic font size"
+          >
+            A−
+          </button>
+
+
+          <div
+            id="fontSizeValue"
+            class="font-size-value"
+          >
+            34 px
+          </div>
+
+
+          <button
+            class="font-control-button"
+            onclick="changeArabicFontSize(2)"
+            aria-label="Increase Arabic font size"
+          >
+            A+
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="settings-section">
+
+        <div class="theme-row">
+
+          <div class="theme-text">
+
+            <div class="settings-label">
+              Dark mode
+            </div>
+
+            <div class="settings-description">
+              Use a darker theme for nighttime reading.
+            </div>
+
+          </div>
+
+
+          <label class="switch">
+
+            <input
+              id="darkModeToggle"
+              type="checkbox"
+              onchange="setDarkMode(this.checked)"
+            />
+
+            <span class="slider"></span>
+
+          </label>
+
+        </div>
+
+      </div>
+
+
+      <div class="settings-section">
+
+        <button
+          class="reset-button"
+          onclick="resetReaderSettings()"
+        >
+          Reset reader settings
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
 
 
   <script>
@@ -676,6 +1064,11 @@
     ];
 
 
+    const DEFAULT_FONT_SIZE = 34;
+    const MIN_FONT_SIZE = 24;
+    const MAX_FONT_SIZE = 54;
+
+
     let quranText = {};
     let quranLoaded = false;
 
@@ -684,53 +1077,310 @@
 
     let scrollTimer = null;
 
+    let arabicFontSize =
+      DEFAULT_FONT_SIZE;
+
 
     const homeScreen =
-      document.getElementById("homeScreen");
+      document.getElementById(
+        "homeScreen"
+      );
 
     const readerScreen =
-      document.getElementById("readerScreen");
+      document.getElementById(
+        "readerScreen"
+      );
 
     const bookmarksScreen =
-      document.getElementById("bookmarksScreen");
+      document.getElementById(
+        "bookmarksScreen"
+      );
 
     const surahList =
-      document.getElementById("surahList");
+      document.getElementById(
+        "surahList"
+      );
 
     const continueCard =
-      document.getElementById("continueCard");
+      document.getElementById(
+        "continueCard"
+      );
 
     const continueTitle =
-      document.getElementById("continueTitle");
+      document.getElementById(
+        "continueTitle"
+      );
 
     const bookmarkCount =
-      document.getElementById("bookmarkCount");
+      document.getElementById(
+        "bookmarkCount"
+      );
 
     const bookmarkList =
-      document.getElementById("bookmarkList");
+      document.getElementById(
+        "bookmarkList"
+      );
 
     const readerTitle =
-      document.getElementById("readerTitle");
+      document.getElementById(
+        "readerTitle"
+      );
 
     const readerArabicName =
-      document.getElementById("readerArabicName");
+      document.getElementById(
+        "readerArabicName"
+      );
 
     const ayahContainer =
-      document.getElementById("ayahContainer");
+      document.getElementById(
+        "ayahContainer"
+      );
 
+    const settingsOverlay =
+      document.getElementById(
+        "settingsOverlay"
+      );
+
+    const fontSizeValue =
+      document.getElementById(
+        "fontSizeValue"
+      );
+
+    const darkModeToggle =
+      document.getElementById(
+        "darkModeToggle"
+      );
+
+    const themeColor =
+      document.getElementById(
+        "themeColor"
+      );
+
+
+    /*
+      READER SETTINGS
+    */
+
+    function loadReaderSettings() {
+
+      const savedFontSize =
+        Number(
+          localStorage.getItem(
+            "quranArabicFontSize"
+          )
+        );
+
+
+      if (
+        savedFontSize >= MIN_FONT_SIZE &&
+        savedFontSize <= MAX_FONT_SIZE
+      ) {
+
+        arabicFontSize =
+          savedFontSize;
+
+      } else {
+
+        arabicFontSize =
+          DEFAULT_FONT_SIZE;
+
+      }
+
+
+      const darkMode =
+        localStorage.getItem(
+          "quranDarkMode"
+        ) === "true";
+
+
+      applyArabicFontSize();
+
+      setDarkMode(
+        darkMode,
+        false
+      );
+
+    }
+
+
+    function applyArabicFontSize() {
+
+      document.documentElement.style.setProperty(
+        "--arabic-font-size",
+        arabicFontSize + "px"
+      );
+
+
+      fontSizeValue.textContent =
+        arabicFontSize + " px";
+
+    }
+
+
+    function changeArabicFontSize(
+      amount
+    ) {
+
+      /*
+        Save the current ayah first because
+        changing font size causes text to reflow.
+      */
+      saveReadingPosition();
+
+
+      arabicFontSize +=
+        amount;
+
+
+      if (
+        arabicFontSize < MIN_FONT_SIZE
+      ) {
+
+        arabicFontSize =
+          MIN_FONT_SIZE;
+
+      }
+
+
+      if (
+        arabicFontSize > MAX_FONT_SIZE
+      ) {
+
+        arabicFontSize =
+          MAX_FONT_SIZE;
+
+      }
+
+
+      localStorage.setItem(
+        "quranArabicFontSize",
+        arabicFontSize
+      );
+
+
+      applyArabicFontSize();
+
+    }
+
+
+    function setDarkMode(
+      enabled,
+      save = true
+    ) {
+
+      document.body.classList.toggle(
+        "dark",
+        enabled
+      );
+
+
+      darkModeToggle.checked =
+        enabled;
+
+
+      themeColor.setAttribute(
+        "content",
+        enabled
+          ? "#111714"
+          : "#f6f3ec"
+      );
+
+
+      if (save) {
+
+        localStorage.setItem(
+          "quranDarkMode",
+          enabled
+        );
+
+      }
+
+    }
+
+
+    function resetReaderSettings() {
+
+      arabicFontSize =
+        DEFAULT_FONT_SIZE;
+
+
+      localStorage.removeItem(
+        "quranArabicFontSize"
+      );
+
+
+      localStorage.removeItem(
+        "quranDarkMode"
+      );
+
+
+      applyArabicFontSize();
+
+      setDarkMode(
+        false,
+        false
+      );
+
+    }
+
+
+    function openSettings() {
+
+      /*
+        Keep Continue Reading up to date if
+        Settings is opened while reading.
+      */
+      saveReadingPosition();
+
+
+      fontSizeValue.textContent =
+        arabicFontSize + " px";
+
+
+      darkModeToggle.checked =
+        document.body.classList.contains(
+          "dark"
+        );
+
+
+      settingsOverlay.classList.remove(
+        "hidden"
+      );
+
+    }
+
+
+    function closeSettings() {
+
+      settingsOverlay.classList.add(
+        "hidden"
+      );
+
+    }
+
+
+    /*
+      QURAN DATA
+    */
 
     async function loadQuran() {
 
       try {
 
         const response =
-          await fetch("quran-uthmani.txt");
+          await fetch(
+            "quran-uthmani.txt"
+          );
+
 
         if (!response.ok) {
+
           throw new Error(
             "Could not load Quran text."
           );
+
         }
+
 
         const text =
           await response.text();
@@ -740,25 +1390,49 @@
           text
             .replace(/\r/g, "")
             .split("\n")
-            .map(line => line.trim())
-            .filter(line =>
-              /^\d+\|\d+\|/.test(line)
+            .map(
+              line =>
+                line.trim()
             )
-            .map(line => {
+            .filter(
+              line =>
+                /^\d+\|\d+\|/.test(
+                  line
+                )
+            )
+            .map(
+              line => {
 
-              const parts =
-                line.split("|");
-
-              return {
-                surah: Number(parts[0]),
-                ayah: Number(parts[1]),
-                text: parts.slice(2).join("|")
-              };
-
-            });
+                const parts =
+                  line.split("|");
 
 
-        if (verses.length !== 6236) {
+                return {
+
+                  surah:
+                    Number(
+                      parts[0]
+                    ),
+
+                  ayah:
+                    Number(
+                      parts[1]
+                    ),
+
+                  text:
+                    parts
+                      .slice(2)
+                      .join("|")
+
+                };
+
+              }
+            );
+
+
+        if (
+          verses.length !== 6236
+        ) {
 
           throw new Error(
             "Expected 6236 ayat but found " +
@@ -778,7 +1452,8 @@
             verses
               .filter(
                 verse =>
-                  verse.surah === surahNumber
+                  verse.surah ===
+                  surahNumber
               )
               .sort(
                 (a, b) =>
@@ -801,10 +1476,16 @@
           const expected =
             surahs[i][3];
 
-          const actual =
-            quranText[i + 1].length;
 
-          if (actual !== expected) {
+          const actual =
+            quranText[
+              i + 1
+            ].length;
+
+
+          if (
+            actual !== expected
+          ) {
 
             throw new Error(
               "Surah " +
@@ -826,7 +1507,10 @@
 
       } catch (error) {
 
-        console.error(error);
+        console.error(
+          error
+        );
+
 
         alert(
           "The Quran text could not be loaded. " +
@@ -838,6 +1522,10 @@
     }
 
 
+    /*
+      BOOKMARK STORAGE
+    */
+
     function getBookmarks() {
 
       try {
@@ -847,26 +1535,41 @@
             "quranBookmarks"
           );
 
+
         if (!saved) {
           return [];
         }
 
 
         const bookmarks =
-          JSON.parse(saved);
+          JSON.parse(
+            saved
+          );
 
 
-        if (!Array.isArray(bookmarks)) {
+        if (
+          !Array.isArray(
+            bookmarks
+          )
+        ) {
+
           return [];
+
         }
 
 
         return bookmarks.filter(
           bookmark =>
             bookmark &&
-            Number(bookmark.surah) >= 1 &&
-            Number(bookmark.surah) <= 114 &&
-            Number(bookmark.ayah) >= 1
+            Number(
+              bookmark.surah
+            ) >= 1 &&
+            Number(
+              bookmark.surah
+            ) <= 114 &&
+            Number(
+              bookmark.ayah
+            ) >= 1
         );
 
 
@@ -876,6 +1579,7 @@
           "Could not read bookmarks:",
           error
         );
+
 
         return [];
 
@@ -890,7 +1594,9 @@
 
       localStorage.setItem(
         "quranBookmarks",
-        JSON.stringify(bookmarks)
+        JSON.stringify(
+          bookmarks
+        )
       );
 
 
@@ -904,14 +1610,14 @@
       ayah
     ) {
 
-      const bookmarks =
-        getBookmarks();
-
-
-      return bookmarks.some(
+      return getBookmarks().some(
         bookmark =>
-          Number(bookmark.surah) === Number(surah) &&
-          Number(bookmark.ayah) === Number(ayah)
+          Number(
+            bookmark.surah
+          ) === Number(surah) &&
+          Number(
+            bookmark.ayah
+          ) === Number(ayah)
       );
 
     }
@@ -929,12 +1635,18 @@
       const index =
         bookmarks.findIndex(
           bookmark =>
-            Number(bookmark.surah) === Number(surah) &&
-            Number(bookmark.ayah) === Number(ayah)
+            Number(
+              bookmark.surah
+            ) === Number(surah) &&
+            Number(
+              bookmark.ayah
+            ) === Number(ayah)
         );
 
 
-      if (index >= 0) {
+      if (
+        index >= 0
+      ) {
 
         bookmarks.splice(
           index,
@@ -944,8 +1656,13 @@
       } else {
 
         bookmarks.push({
-          surah: Number(surah),
-          ayah: Number(ayah)
+
+          surah:
+            Number(surah),
+
+          ayah:
+            Number(ayah)
+
         });
 
       }
@@ -955,7 +1672,8 @@
         (a, b) => {
 
           if (
-            a.surah !== b.surah
+            a.surah !==
+            b.surah
           ) {
 
             return (
@@ -964,6 +1682,7 @@
             );
 
           }
+
 
           return (
             a.ayah -
@@ -997,8 +1716,15 @@
           .filter(
             bookmark =>
               !(
-                Number(bookmark.surah) === Number(surah) &&
-                Number(bookmark.ayah) === Number(ayah)
+                Number(
+                  bookmark.surah
+                ) ===
+                  Number(surah) &&
+
+                Number(
+                  bookmark.ayah
+                ) ===
+                  Number(ayah)
               )
           );
 
@@ -1022,7 +1748,8 @@
       bookmarkCount.textContent =
         bookmarks.length === 1
           ? "1 saved"
-          : bookmarks.length + " saved";
+          : bookmarks.length +
+            " saved";
 
     }
 
@@ -1064,6 +1791,7 @@
 
       button.setAttribute(
         "aria-label",
+
         saved
           ? `Remove bookmark for Surah ${surah}, Ayah ${ayah}`
           : `Bookmark Surah ${surah}, Ayah ${ayah}`
@@ -1071,6 +1799,10 @@
 
     }
 
+
+    /*
+      HOME
+    */
 
     function buildHome() {
 
@@ -1083,6 +1815,7 @@
 
           const number =
             index + 1;
+
 
           const row =
             document.createElement(
@@ -1135,10 +1868,15 @@
 
 
       updateContinueCard();
+
       updateBookmarkCount();
 
     }
 
+
+    /*
+      READER
+    */
 
     function openSurah(
       number,
@@ -1152,13 +1890,16 @@
           "Quran text is still loading. Please try again."
         );
 
+
         return;
 
       }
 
 
       const surah =
-        surahs[number - 1];
+        surahs[
+          number - 1
+        ];
 
 
       if (!surah) {
@@ -1167,19 +1908,23 @@
 
 
       let openingAyah =
-        Number(targetAyah);
+        Number(
+          targetAyah
+        );
 
 
       if (
         !openingAyah ||
         openingAyah < 1 ||
-        openingAyah > surah[3]
+        openingAyah >
+          surah[3]
       ) {
 
         openingAyah =
           Number(
             localStorage.getItem(
-              "lastAyah_" + number
+              "lastAyah_" +
+              number
             )
           ) || 1;
 
@@ -1188,6 +1933,7 @@
 
       currentSurah =
         number;
+
 
       currentAyah =
         openingAyah;
@@ -1200,24 +1946,36 @@
 
 
       localStorage.setItem(
-        "lastAyah_" + number,
+        "lastAyah_" +
+          number,
         openingAyah
       );
 
 
-      if (addHistory) {
+      if (
+        addHistory
+      ) {
 
         history.pushState(
+
           {
-            screen: "reader",
-            surah: number,
-            ayah: openingAyah
+            screen:
+              "reader",
+
+            surah:
+              number,
+
+            ayah:
+              openingAyah
           },
+
           "",
+
           "#surah-" +
             number +
             "-ayah-" +
             openingAyah
+
         );
 
       }
@@ -1227,9 +1985,11 @@
         "hidden"
       );
 
+
       bookmarksScreen.classList.add(
         "hidden"
       );
+
 
       readerScreen.classList.remove(
         "hidden"
@@ -1251,7 +2011,9 @@
 
 
       const verses =
-        quranText[number];
+        quranText[
+          number
+        ];
 
 
       verses.forEach(
@@ -1324,39 +2086,52 @@
       );
 
 
-      setTimeout(() => {
+      setTimeout(
+        () => {
 
-        const target =
-          document.querySelector(
-            `.ayah[data-ayah="${openingAyah}"]`
-          );
+          const target =
+            document.querySelector(
+              `.ayah[data-ayah="${openingAyah}"]`
+            );
 
 
-        if (target) {
+          if (target) {
 
-          target.scrollIntoView({
-            behavior: "auto",
-            block: "start"
-          });
+            target.scrollIntoView({
 
-        } else {
+              behavior:
+                "auto",
 
-          window.scrollTo(
-            0,
-            0
-          );
+              block:
+                "start"
 
-        }
+            });
 
-      }, 100);
+          } else {
+
+            window.scrollTo(
+              0,
+              0
+            );
+
+          }
+
+        },
+
+        100
+      );
 
     }
 
 
     function saveReadingPosition() {
 
-      if (!currentSurah) {
+      if (
+        !currentSurah
+      ) {
+
         return;
+
       }
 
 
@@ -1366,27 +2141,35 @@
         );
 
 
-      if (!ayahs.length) {
+      if (
+        !ayahs.length
+      ) {
+
         return;
+
       }
 
 
       let visibleAyah =
-        currentAyah || 1;
+        currentAyah ||
+        1;
 
 
       const readingLine =
         180;
 
 
-      for (const ayah of ayahs) {
+      for (
+        const ayah of ayahs
+      ) {
 
         const rect =
           ayah.getBoundingClientRect();
 
 
         if (
-          rect.top <= readingLine &&
+          rect.top <=
+            readingLine &&
           rect.bottom > 0
         ) {
 
@@ -1395,8 +2178,10 @@
               ayah.dataset.ayah
             );
 
+
         } else if (
-          rect.top > readingLine
+          rect.top >
+          readingLine
         ) {
 
           break;
@@ -1417,27 +2202,38 @@
 
 
       localStorage.setItem(
-        "lastAyah_" + currentSurah,
+        "lastAyah_" +
+          currentSurah,
         currentAyah
       );
 
 
       if (
         history.state &&
-        history.state.screen === "reader"
+        history.state.screen ===
+          "reader"
       ) {
 
         history.replaceState(
+
           {
-            screen: "reader",
-            surah: currentSurah,
-            ayah: currentAyah
+            screen:
+              "reader",
+
+            surah:
+              currentSurah,
+
+            ayah:
+              currentAyah
           },
+
           "",
+
           "#surah-" +
             currentSurah +
             "-ayah-" +
             currentAyah
+
         );
 
       }
@@ -1464,6 +2260,10 @@
     );
 
 
+    /*
+      HOME NAVIGATION
+    */
+
     function showHome() {
 
       saveReadingPosition();
@@ -1477,9 +2277,11 @@
         "hidden"
       );
 
+
       bookmarksScreen.classList.add(
         "hidden"
       );
+
 
       homeScreen.classList.remove(
         "hidden"
@@ -1493,10 +2295,18 @@
 
 
       updateContinueCard();
+
       updateBookmarkCount();
 
     }
 
+
+    /*
+      CUSTOM ‹ BUTTON
+
+      Directly goes Home and replaces the
+      reader history entry.
+    */
 
     function goHome() {
 
@@ -1504,15 +2314,24 @@
 
 
       history.replaceState(
+
         {
-          screen: "home"
+          screen:
+            "home"
         },
+
         "",
+
         window.location.pathname
+
       );
 
     }
 
+
+    /*
+      BOOKMARKS SCREEN
+    */
 
     function openBookmarks(
       addHistory = true
@@ -1525,14 +2344,21 @@
         null;
 
 
-      if (addHistory) {
+      if (
+        addHistory
+      ) {
 
         history.pushState(
+
           {
-            screen: "bookmarks"
+            screen:
+              "bookmarks"
           },
+
           "",
+
           "#bookmarks"
+
         );
 
       }
@@ -1542,9 +2368,11 @@
         "hidden"
       );
 
+
       readerScreen.classList.add(
         "hidden"
       );
+
 
       bookmarksScreen.classList.remove(
         "hidden"
@@ -1568,11 +2396,16 @@
 
 
       history.replaceState(
+
         {
-          screen: "home"
+          screen:
+            "home"
         },
+
         "",
+
         window.location.pathname
+
       );
 
     }
@@ -1591,7 +2424,9 @@
       updateBookmarkCount();
 
 
-      if (!bookmarks.length) {
+      if (
+        !bookmarks.length
+      ) {
 
         bookmarkList.innerHTML = `
 
@@ -1626,7 +2461,8 @@
 
           const surah =
             surahs[
-              bookmark.surah - 1
+              bookmark.surah -
+              1
             ];
 
 
@@ -1702,13 +2538,25 @@
     }
 
 
+    /*
+      SAFARI BACK + LEFT EDGE SWIPE
+    */
+
     window.addEventListener(
       "popstate",
       event => {
 
+        /*
+          Close the settings overlay first
+          if it happens to be open.
+        */
+        closeSettings();
+
+
         if (
           event.state &&
-          event.state.screen === "reader"
+          event.state.screen ===
+            "reader"
         ) {
 
           const surah =
@@ -1732,7 +2580,8 @@
 
         } else if (
           event.state &&
-          event.state.screen === "bookmarks"
+          event.state.screen ===
+            "bookmarks"
         ) {
 
           openBookmarks(
@@ -1750,6 +2599,10 @@
     );
 
 
+    /*
+      CONTINUE READING
+    */
+
     function updateContinueCard() {
 
       const lastSurah =
@@ -1766,13 +2619,16 @@
       ) {
 
         const surah =
-          surahs[lastSurah - 1];
+          surahs[
+            lastSurah - 1
+          ];
 
 
         const lastAyah =
           Number(
             localStorage.getItem(
-              "lastAyah_" + lastSurah
+              "lastAyah_" +
+              lastSurah
             )
           ) || 1;
 
@@ -1817,7 +2673,8 @@
         const lastAyah =
           Number(
             localStorage.getItem(
-              "lastAyah_" + lastSurah
+              "lastAyah_" +
+              lastSurah
             )
           ) || 1;
 
@@ -1833,20 +2690,42 @@
     }
 
 
+    /*
+      STARTUP
+    */
+
     async function startApp() {
 
+      /*
+        Load visual preferences first so
+        the correct theme appears immediately.
+      */
+
+      loadReaderSettings();
+
+
       history.replaceState(
+
         {
-          screen: "home"
+          screen:
+            "home"
         },
+
         "",
+
         window.location.pathname
+
       );
 
+
+      /*
+        Remove old pixel-based reading progress.
+      */
 
       localStorage.removeItem(
         "lastPositionSurah"
       );
+
 
       localStorage.removeItem(
         "lastScrollPosition"
