@@ -30,6 +30,7 @@
       margin: 0;
       background: var(--background);
       color: var(--text);
+
       font-family:
         -apple-system,
         BlinkMacSystemFont,
@@ -601,7 +602,8 @@
         }
 
 
-        quranLoaded = true;
+        quranLoaded =
+          true;
 
 
       } catch (error) {
@@ -620,7 +622,8 @@
 
     function buildHome() {
 
-      surahList.innerHTML = "";
+      surahList.innerHTML =
+        "";
 
 
       surahs.forEach(
@@ -630,10 +633,13 @@
             index + 1;
 
           const row =
-            document.createElement("div");
+            document.createElement(
+              "div"
+            );
 
           row.className =
             "surah-row";
+
 
           row.onclick =
             () => openSurah(number);
@@ -944,21 +950,21 @@
     }
 
 
+    /*
+      Custom in-app back button:
+      returns Home directly without calling history.back().
+    */
     function goHome() {
 
-      if (currentSurah) {
-
-        history.back();
-
-      } else {
-
-        showHome();
-
-      }
+      showHome();
 
     }
 
 
+    /*
+      Safari Back and the iPhone left-edge swipe
+      are handled here through popstate.
+    */
     window.addEventListener(
       "popstate",
       event => {
