@@ -1,1127 +1,1096 @@
-    <!doctype html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1, viewport-fit=cover"
-      />
-
-      <meta name="theme-color" content="#f6f3ec" />
-
-      <title>My Quran Reader</title>
-
-      <style>
-        * {
-          box-sizing: border-box;
-        }
-
-        :root {
-          --background: #f6f3ec;
-          --card: #ffffff;
-          --text: #1d2925;
-          --secondary: #6f7a75;
-          --border: #e2ddd2;
-          --accent: #315c4b;
-        }
-
-        body {
-          margin: 0;
-          background: var(--background);
-          color: var(--text);
-
-          font-family:
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            sans-serif;
-        }
-
-        .app {
-          max-width: 700px;
-          margin: auto;
-
-          padding:
-            calc(18px + env(safe-area-inset-top))
-            16px
-            calc(50px + env(safe-area-inset-bottom));
-        }
-
-        .hidden {
-          display: none;
-        }
-
-        h1 {
-          margin: 0;
-          font-size: 30px;
-        }
-
-        .subtitle {
-          color: var(--secondary);
-          margin-top: 6px;
-          margin-bottom: 22px;
-        }
-
-        .continue-card {
-          background: var(--accent);
-          color: white;
-
-          border-radius: 18px;
-          padding: 18px;
-
-          margin-bottom: 22px;
-
-          cursor: pointer;
-        }
-
-        .continue-small {
-          opacity: 0.8;
-          font-size: 13px;
-          margin-bottom: 5px;
-        }
-
-        .continue-title {
-          font-size: 19px;
-          font-weight: 600;
-        }
-
-        .surah-list {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-        }
-
-        .surah-row {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-
-          background: var(--card);
-
-          border: 1px solid var(--border);
-          border-radius: 16px;
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+
+  <meta name="theme-color" content="#f6f3ec" />
+
+  <title>My Quran Reader</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --background: #f6f3ec;
+      --card: #ffffff;
+      --text: #1d2925;
+      --secondary: #6f7a75;
+      --border: #e2ddd2;
+      --accent: #315c4b;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    }
+
+    .app {
+      max-width: 700px;
+      margin: auto;
+
+      padding:
+        calc(18px + env(safe-area-inset-top))
+        16px
+        calc(50px + env(safe-area-inset-bottom));
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+
+    .subtitle {
+      color: var(--secondary);
+      margin-top: 6px;
+      margin-bottom: 22px;
+    }
+
+    .continue-card {
+      background: var(--accent);
+      color: white;
+
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 22px;
+
+      cursor: pointer;
+    }
+
+    .continue-small {
+      opacity: 0.8;
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .continue-title {
+      font-size: 19px;
+      font-weight: 600;
+    }
+
+    .surah-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .surah-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+
+      padding: 15px;
+      cursor: pointer;
+    }
 
-          padding: 15px;
+    .surah-number {
+      width: 38px;
+      height: 38px;
 
-          cursor: pointer;
-        }
+      border: 1px solid var(--border);
+      border-radius: 50%;
 
-        .surah-number {
-          width: 38px;
-          height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-          border: 1px solid var(--border);
-          border-radius: 50%;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
 
-          display: flex;
-          align-items: center;
-          justify-content: center;
+    .surah-text {
+      flex: 1;
+    }
 
-          font-size: 14px;
-          flex-shrink: 0;
-        }
+    .surah-name {
+      font-size: 17px;
+      font-weight: 600;
+    }
 
-        .surah-text {
-          flex: 1;
-        }
+    .surah-meaning {
+      color: var(--secondary);
+      font-size: 13px;
+      margin-top: 3px;
+    }
 
-        .surah-name {
-          font-size: 17px;
-          font-weight: 600;
-        }
+    .surah-arabic {
+      direction: rtl;
+      font-size: 24px;
 
-        .surah-meaning {
-          color: var(--secondary);
-          font-size: 13px;
-          margin-top: 3px;
-        }
+      font-family:
+        "Geeza Pro",
+        "Noto Naskh Arabic",
+        serif;
+    }
 
-        .surah-arabic {
-          direction: rtl;
-          font-size: 24px;
+    .reader-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
 
-          font-family:
-            "Geeza Pro",
-            "Noto Naskh Arabic",
-            serif;
-        }
+      position: sticky;
+      top: 0;
+      z-index: 100;
 
-        .reader-top {
-          display: flex;
-          align-items: center;
-          gap: 12px;
+      background: var(--background);
 
-          position: sticky;
-          top: 0;
-          z-index: 100;
+      padding:
+        calc(8px + env(safe-area-inset-top))
+        0
+        12px;
 
-          background: var(--background);
+      margin-bottom: 20px;
+    }
 
-          padding:
-            calc(8px + env(safe-area-inset-top))
-            0
-            12px;
+    .back-button {
+      background: var(--card);
+      color: var(--text);
 
-          margin-bottom: 20px;
-        }
+      width: 44px;
+      height: 44px;
 
-        .back-button {
-          background: var(--card);
-          color: var(--text);
+      border-radius: 50%;
+      border: 1px solid var(--border);
 
-          width: 44px;
-          height: 44px;
+      font-size: 28px;
+      line-height: 1;
 
-          border-radius: 50%;
-          border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-          font-size: 28px;
-          line-height: 1;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
 
-          display: flex;
-          align-items: center;
-          justify-content: center;
+    .reader-heading {
+      flex: 1;
+    }
 
-          flex-shrink: 0;
+    .reader-arabic-name {
+      direction: rtl;
+      color: var(--secondary);
+      margin-top: 3px;
+    }
 
-          cursor: pointer;
-        }
+    .ayah {
+      background: var(--card);
 
-        .reader-heading {
-          flex: 1;
-        }
+      border: 1px solid var(--border);
+      border-radius: 18px;
 
-        .reader-arabic-name {
-          direction: rtl;
-          color: var(--secondary);
-          margin-top: 3px;
-        }
+      padding: 22px 18px;
+      margin-bottom: 14px;
 
-        .ayah {
-          background: var(--card);
+      scroll-margin-top: 90px;
+    }
 
-          border: 1px solid var(--border);
-          border-radius: 18px;
+    .arabic {
+      direction: rtl;
+      text-align: right;
 
-          padding: 22px 18px;
-          margin-bottom: 14px;
+      font-family:
+        "Geeza Pro",
+        "Noto Naskh Arabic",
+        serif;
 
-          scroll-margin-top: 18px;
-        }
+      font-size: 34px;
+      line-height: 2;
+    }
 
-        .arabic {
-          direction: rtl;
-          text-align: right;
+    .ayah-number {
+      display: inline-flex;
 
-          font-family:
-            "Geeza Pro",
-            "Noto Naskh Arabic",
-            serif;
+      align-items: center;
+      justify-content: center;
 
-          font-size: 34px;
-          line-height: 2;
-        }
+      width: 30px;
+      height: 30px;
 
-        .ayah-number {
-          display: inline-flex;
+      border: 1px solid var(--border);
+      border-radius: 50%;
 
-          align-items: center;
-          justify-content: center;
+      font-family: -apple-system, sans-serif;
+      font-size: 12px;
 
-          width: 30px;
-          height: 30px;
+      margin-right: 7px;
+    }
 
-          border: 1px solid var(--border);
-          border-radius: 50%;
+    .source-footer {
+      text-align: center;
+      color: var(--secondary);
 
-          font-family: -apple-system, sans-serif;
-          font-size: 12px;
+      font-size: 12px;
+      line-height: 1.6;
 
-          margin-right: 7px;
-        }
+      margin-top: 35px;
+      padding: 20px;
+    }
 
-        .source-footer {
-          text-align: center;
-          color: var(--secondary);
+    .source-footer a {
+      color: var(--accent);
+    }
+  </style>
+</head>
 
-          font-size: 12px;
-          line-height: 1.6;
+<body>
 
-          margin-top: 35px;
-          padding: 20px;
-        }
+  <main class="app">
 
-        .source-footer a {
-          color: var(--accent);
-        }
-      </style>
-    </head>
+    <!-- HOME SCREEN -->
+    <section id="homeScreen">
 
-    <body>
+      <h1>Quran</h1>
 
-      <main class="app">
+      <div class="subtitle">
+        Choose a Surah to begin reading
+      </div>
 
-        <!-- HOME SCREEN -->
-        <section id="homeScreen">
+      <div
+        id="continueCard"
+        class="continue-card hidden"
+        onclick="continueReading()"
+      >
+        <div class="continue-small">
+          Continue Reading
+        </div>
 
-          <h1>Quran</h1>
+        <div
+          id="continueTitle"
+          class="continue-title"
+        ></div>
+      </div>
 
-          <div class="subtitle">
-            Choose a Surah to begin reading
-          </div>
+      <div
+        id="surahList"
+        class="surah-list"
+      ></div>
+
+    </section>
+
+
+    <!-- READER SCREEN -->
+    <section
+      id="readerScreen"
+      class="hidden"
+    >
+
+      <div class="reader-top">
+
+        <button
+          class="back-button"
+          onclick="goHome()"
+          aria-label="Back to Surah list"
+        >
+          ‹
+        </button>
+
+        <div class="reader-heading">
+
+          <h1 id="readerTitle">
+            Surah
+          </h1>
 
           <div
-            id="continueCard"
-            class="continue-card hidden"
-            onclick="continueReading()"
-          >
-            <div class="continue-small">
-              Continue Reading
-            </div>
-
-            <div
-              id="continueTitle"
-              class="continue-title"
-            ></div>
-          </div>
-
-          <div
-            id="surahList"
-            class="surah-list"
+            id="readerArabicName"
+            class="reader-arabic-name"
           ></div>
 
-        </section>
+        </div>
+
+      </div>
+
+      <div id="ayahContainer"></div>
+
+    </section>
 
 
-        <!-- READER SCREEN -->
-        <section
-          id="readerScreen"
-          class="hidden"
-        >
+    <footer class="source-footer">
 
-          <div class="reader-top">
+      Quran text source:
+      <a
+        href="https://tanzil.net"
+        target="_blank"
+        rel="noopener"
+      >
+        Tanzil Project
+      </a>
 
-            <button
-              class="back-button"
-              onclick="goHome()"
-            >
-              ‹
-            </button>
+      <br>
 
-            <div class="reader-heading">
+      Tanzil Quran Text
+      © 2007–2021 Tanzil Project
 
-              <h1 id="readerTitle">
-                Surah
-              </h1>
+    </footer>
 
-              <div
-                id="readerArabicName"
-                class="reader-arabic-name"
-              ></div>
+  </main>
+
+
+  <script>
+
+    const surahs = [
+      ["Al-Fatihah","The Opening","الفاتحة",7],
+      ["Al-Baqarah","The Cow","البقرة",286],
+      ["Ali 'Imran","Family of Imran","آل عمران",200],
+      ["An-Nisa","The Women","النساء",176],
+      ["Al-Ma'idah","The Table Spread","المائدة",120],
+      ["Al-An'am","The Cattle","الأنعام",165],
+      ["Al-A'raf","The Heights","الأعراف",206],
+      ["Al-Anfal","The Spoils of War","الأنفال",75],
+      ["At-Tawbah","The Repentance","التوبة",129],
+      ["Yunus","Jonah","يونس",109],
+      ["Hud","Hud","هود",123],
+      ["Yusuf","Joseph","يوسف",111],
+      ["Ar-Ra'd","The Thunder","الرعد",43],
+      ["Ibrahim","Abraham","إبراهيم",52],
+      ["Al-Hijr","The Rocky Tract","الحجر",99],
+      ["An-Nahl","The Bee","النحل",128],
+      ["Al-Isra","The Night Journey","الإسراء",111],
+      ["Al-Kahf","The Cave","الكهف",110],
+      ["Maryam","Mary","مريم",98],
+      ["Taha","Ta-Ha","طه",135],
+      ["Al-Anbya","The Prophets","الأنبياء",112],
+      ["Al-Hajj","The Pilgrimage","الحج",78],
+      ["Al-Mu'minun","The Believers","المؤمنون",118],
+      ["An-Nur","The Light","النور",64],
+      ["Al-Furqan","The Criterion","الفرقان",77],
+      ["Ash-Shu'ara","The Poets","الشعراء",227],
+      ["An-Naml","The Ant","النمل",93],
+      ["Al-Qasas","The Stories","القصص",88],
+      ["Al-Ankabut","The Spider","العنكبوت",69],
+      ["Ar-Rum","The Romans","الروم",60],
+      ["Luqman","Luqman","لقمان",34],
+      ["As-Sajdah","The Prostration","السجدة",30],
+      ["Al-Ahzab","The Combined Forces","الأحزاب",73],
+      ["Saba","Sheba","سبأ",54],
+      ["Fatir","Originator","فاطر",45],
+      ["Ya-Sin","Ya-Sin","يس",83],
+      ["As-Saffat","Those Who Set the Ranks","الصافات",182],
+      ["Sad","Sad","ص",88],
+      ["Az-Zumar","The Groups","الزمر",75],
+      ["Ghafir","The Forgiver","غافر",85],
+      ["Fussilat","Explained in Detail","فصلت",54],
+      ["Ash-Shuraa","Consultation","الشورى",53],
+      ["Az-Zukhruf","Ornaments of Gold","الزخرف",89],
+      ["Ad-Dukhan","The Smoke","الدخان",59],
+      ["Al-Jathiyah","The Crouching","الجاثية",37],
+      ["Al-Ahqaf","The Wind-Curved Sandhills","الأحقاف",35],
+      ["Muhammad","Muhammad","محمد",38],
+      ["Al-Fath","The Victory","الفتح",29],
+      ["Al-Hujurat","The Rooms","الحجرات",18],
+      ["Qaf","Qaf","ق",45],
+      ["Adh-Dhariyat","The Winnowing Winds","الذاريات",60],
+      ["At-Tur","The Mount","الطور",49],
+      ["An-Najm","The Star","النجم",62],
+      ["Al-Qamar","The Moon","القمر",55],
+      ["Ar-Rahman","The Most Merciful","الرحمن",78],
+      ["Al-Waqi'ah","The Inevitable","الواقعة",96],
+      ["Al-Hadid","The Iron","الحديد",29],
+      ["Al-Mujadila","The Pleading Woman","المجادلة",22],
+      ["Al-Hashr","The Exile","الحشر",24],
+      ["Al-Mumtahanah","She That Is Examined","الممتحنة",13],
+      ["As-Saff","The Ranks","الصف",14],
+      ["Al-Jumu'ah","Friday","الجمعة",11],
+      ["Al-Munafiqun","The Hypocrites","المنافقون",11],
+      ["At-Taghabun","Mutual Disillusion","التغابن",18],
+      ["At-Talaq","Divorce","الطلاق",12],
+      ["At-Tahrim","The Prohibition","التحريم",12],
+      ["Al-Mulk","The Sovereignty","الملك",30],
+      ["Al-Qalam","The Pen","القلم",52],
+      ["Al-Haqqah","The Reality","الحاقة",52],
+      ["Al-Ma'arij","The Ascending Stairways","المعارج",44],
+      ["Nuh","Noah","نوح",28],
+      ["Al-Jinn","The Jinn","الجن",28],
+      ["Al-Muzzammil","The Enshrouded One","المزمل",20],
+      ["Al-Muddaththir","The Cloaked One","المدثر",56],
+      ["Al-Qiyamah","The Resurrection","القيامة",40],
+      ["Al-Insan","Man","الإنسان",31],
+      ["Al-Mursalat","The Emissaries","المرسلات",50],
+      ["An-Naba","The Tidings","النبأ",40],
+      ["An-Nazi'at","Those Who Drag Forth","النازعات",46],
+      ["Abasa","He Frowned","عبس",42],
+      ["At-Takwir","The Overthrowing","التكوير",29],
+      ["Al-Infitar","The Cleaving","الانفطار",19],
+      ["Al-Mutaffifin","Defrauding","المطففين",36],
+      ["Al-Inshiqaq","The Splitting Open","الانشقاق",25],
+      ["Al-Buruj","The Mansions of the Stars","البروج",22],
+      ["At-Tariq","The Nightcomer","الطارق",17],
+      ["Al-A'la","The Most High","الأعلى",19],
+      ["Al-Ghashiyah","The Overwhelming","الغاشية",26],
+      ["Al-Fajr","The Dawn","الفجر",30],
+      ["Al-Balad","The City","البلد",20],
+      ["Ash-Shams","The Sun","الشمس",15],
+      ["Al-Layl","The Night","الليل",21],
+      ["Ad-Duhaa","The Morning Hours","الضحى",11],
+      ["Ash-Sharh","The Relief","الشرح",8],
+      ["At-Tin","The Fig","التين",8],
+      ["Al-Alaq","The Clot","العلق",19],
+      ["Al-Qadr","The Power","القدر",5],
+      ["Al-Bayyinah","The Clear Proof","البينة",8],
+      ["Az-Zalzalah","The Earthquake","الزلزلة",8],
+      ["Al-Adiyat","The Courser","العاديات",11],
+      ["Al-Qari'ah","The Calamity","القارعة",11],
+      ["At-Takathur","Rivalry in World Increase","التكاثر",8],
+      ["Al-Asr","The Declining Day","العصر",3],
+      ["Al-Humazah","The Traducer","الهمزة",9],
+      ["Al-Fil","The Elephant","الفيل",5],
+      ["Quraysh","Quraysh","قريش",4],
+      ["Al-Ma'un","Small Kindnesses","الماعون",7],
+      ["Al-Kawthar","Abundance","الكوثر",3],
+      ["Al-Kafirun","The Disbelievers","الكافرون",6],
+      ["An-Nasr","Divine Support","النصر",3],
+      ["Al-Masad","The Palm Fiber","المسد",5],
+      ["Al-Ikhlas","Sincerity","الإخلاص",4],
+      ["Al-Falaq","The Daybreak","الفلق",5],
+      ["An-Nas","Mankind","الناس",6]
+    ];
+
+
+    let quranText = {};
+    let quranLoaded = false;
+
+    let currentSurah = null;
+    let currentAyah = 1;
+
+    let scrollTimer = null;
+
+
+    const homeScreen =
+      document.getElementById("homeScreen");
+
+    const readerScreen =
+      document.getElementById("readerScreen");
+
+    const surahList =
+      document.getElementById("surahList");
+
+    const continueCard =
+      document.getElementById("continueCard");
+
+    const continueTitle =
+      document.getElementById("continueTitle");
+
+    const readerTitle =
+      document.getElementById("readerTitle");
+
+    const readerArabicName =
+      document.getElementById("readerArabicName");
+
+    const ayahContainer =
+      document.getElementById("ayahContainer");
+
+
+    async function loadQuran() {
+
+      try {
+
+        const response =
+          await fetch("quran-uthmani.txt");
+
+        if (!response.ok) {
+          throw new Error(
+            "Could not load Quran text."
+          );
+        }
+
+        const text =
+          await response.text();
+
+
+        const verses =
+          text
+            .replace(/\r/g, "")
+            .split("\n")
+            .map(line => line.trim())
+            .filter(line =>
+              /^\d+\|\d+\|/.test(line)
+            )
+            .map(line => {
+
+              const parts =
+                line.split("|");
+
+              return {
+                surah: Number(parts[0]),
+                ayah: Number(parts[1]),
+                text: parts.slice(2).join("|")
+              };
+
+            });
+
+
+        if (verses.length !== 6236) {
+
+          throw new Error(
+            "Expected 6236 ayat but found " +
+            verses.length
+          );
+
+        }
+
+
+        for (
+          let surahNumber = 1;
+          surahNumber <= 114;
+          surahNumber++
+        ) {
+
+          quranText[surahNumber] =
+            verses
+              .filter(
+                verse =>
+                  verse.surah === surahNumber
+              )
+              .sort(
+                (a, b) =>
+                  a.ayah - b.ayah
+              )
+              .map(
+                verse =>
+                  verse.text
+              );
+
+        }
+
+
+        for (
+          let i = 0;
+          i < surahs.length;
+          i++
+        ) {
+
+          const expected =
+            surahs[i][3];
+
+          const actual =
+            quranText[i + 1].length;
+
+          if (actual !== expected) {
+
+            throw new Error(
+              "Surah " +
+              (i + 1) +
+              " expected " +
+              expected +
+              " ayat but found " +
+              actual
+            );
+
+          }
+
+        }
+
+
+        quranLoaded = true;
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(
+          "The Quran text could not be loaded. " +
+          "Please check quran-uthmani.txt."
+        );
+
+      }
+
+    }
+
+
+    function buildHome() {
+
+      surahList.innerHTML = "";
+
+
+      surahs.forEach(
+        (surah, index) => {
+
+          const number =
+            index + 1;
+
+          const row =
+            document.createElement("div");
+
+          row.className =
+            "surah-row";
+
+          row.onclick =
+            () => openSurah(number);
+
+
+          row.innerHTML = `
+
+            <div class="surah-number">
+              ${number}
+            </div>
+
+            <div class="surah-text">
+
+              <div class="surah-name">
+                ${surah[0]}
+              </div>
+
+              <div class="surah-meaning">
+                ${surah[1]} · ${surah[3]} Ayat
+              </div>
 
             </div>
 
-          </div>
+            <div class="surah-arabic">
+              ${surah[2]}
+            </div>
 
-          <div id="ayahContainer"></div>
+          `;
 
-        </section>
 
-
-        <footer class="source-footer">
-
-          Quran text source:
-          <a
-            href="https://tanzil.net"
-            target="_blank"
-            rel="noopener"
-          >
-            Tanzil Project
-          </a>
-
-          <br>
-
-          Tanzil Quran Text
-          © 2007–2021 Tanzil Project
-
-        </footer>
-
-      </main>
-
-
-      <script>
-
-        const surahs = [
-          ["Al-Fatihah","The Opening","الفاتحة",7],
-          ["Al-Baqarah","The Cow","البقرة",286],
-          ["Ali 'Imran","Family of Imran","آل عمران",200],
-          ["An-Nisa","The Women","النساء",176],
-          ["Al-Ma'idah","The Table Spread","المائدة",120],
-          ["Al-An'am","The Cattle","الأنعام",165],
-          ["Al-A'raf","The Heights","الأعراف",206],
-          ["Al-Anfal","The Spoils of War","الأنفال",75],
-          ["At-Tawbah","The Repentance","التوبة",129],
-          ["Yunus","Jonah","يونس",109],
-          ["Hud","Hud","هود",123],
-          ["Yusuf","Joseph","يوسف",111],
-          ["Ar-Ra'd","The Thunder","الرعد",43],
-          ["Ibrahim","Abraham","إبراهيم",52],
-          ["Al-Hijr","The Rocky Tract","الحجر",99],
-          ["An-Nahl","The Bee","النحل",128],
-          ["Al-Isra","The Night Journey","الإسراء",111],
-          ["Al-Kahf","The Cave","الكهف",110],
-          ["Maryam","Mary","مريم",98],
-          ["Taha","Ta-Ha","طه",135],
-          ["Al-Anbya","The Prophets","الأنبياء",112],
-          ["Al-Hajj","The Pilgrimage","الحج",78],
-          ["Al-Mu'minun","The Believers","المؤمنون",118],
-          ["An-Nur","The Light","النور",64],
-          ["Al-Furqan","The Criterion","الفرقان",77],
-          ["Ash-Shu'ara","The Poets","الشعراء",227],
-          ["An-Naml","The Ant","النمل",93],
-          ["Al-Qasas","The Stories","القصص",88],
-          ["Al-Ankabut","The Spider","العنكبوت",69],
-          ["Ar-Rum","The Romans","الروم",60],
-          ["Luqman","Luqman","لقمان",34],
-          ["As-Sajdah","The Prostration","السجدة",30],
-          ["Al-Ahzab","The Combined Forces","الأحزاب",73],
-          ["Saba","Sheba","سبأ",54],
-          ["Fatir","Originator","فاطر",45],
-          ["Ya-Sin","Ya-Sin","يس",83],
-          ["As-Saffat","Those Who Set the Ranks","الصافات",182],
-          ["Sad","Sad","ص",88],
-          ["Az-Zumar","The Groups","الزمر",75],
-          ["Ghafir","The Forgiver","غافر",85],
-          ["Fussilat","Explained in Detail","فصلت",54],
-          ["Ash-Shuraa","Consultation","الشورى",53],
-          ["Az-Zukhruf","Ornaments of Gold","الزخرف",89],
-          ["Ad-Dukhan","The Smoke","الدخان",59],
-          ["Al-Jathiyah","The Crouching","الجاثية",37],
-          ["Al-Ahqaf","The Wind-Curved Sandhills","الأحقاف",35],
-          ["Muhammad","Muhammad","محمد",38],
-          ["Al-Fath","The Victory","الفتح",29],
-          ["Al-Hujurat","The Rooms","الحجرات",18],
-          ["Qaf","Qaf","ق",45],
-          ["Adh-Dhariyat","The Winnowing Winds","الذاريات",60],
-          ["At-Tur","The Mount","الطور",49],
-          ["An-Najm","The Star","النجم",62],
-          ["Al-Qamar","The Moon","القمر",55],
-          ["Ar-Rahman","The Most Merciful","الرحمن",78],
-          ["Al-Waqi'ah","The Inevitable","الواقعة",96],
-          ["Al-Hadid","The Iron","الحديد",29],
-          ["Al-Mujadila","The Pleading Woman","المجادلة",22],
-          ["Al-Hashr","The Exile","الحشر",24],
-          ["Al-Mumtahanah","She That Is Examined","الممتحنة",13],
-          ["As-Saff","The Ranks","الصف",14],
-          ["Al-Jumu'ah","Friday","الجمعة",11],
-          ["Al-Munafiqun","The Hypocrites","المنافقون",11],
-          ["At-Taghabun","Mutual Disillusion","التغابن",18],
-          ["At-Talaq","Divorce","الطلاق",12],
-          ["At-Tahrim","The Prohibition","التحريم",12],
-          ["Al-Mulk","The Sovereignty","الملك",30],
-          ["Al-Qalam","The Pen","القلم",52],
-          ["Al-Haqqah","The Reality","الحاقة",52],
-          ["Al-Ma'arij","The Ascending Stairways","المعارج",44],
-          ["Nuh","Noah","نوح",28],
-          ["Al-Jinn","The Jinn","الجن",28],
-          ["Al-Muzzammil","The Enshrouded One","المزمل",20],
-          ["Al-Muddaththir","The Cloaked One","المدثر",56],
-          ["Al-Qiyamah","The Resurrection","القيامة",40],
-          ["Al-Insan","Man","الإنسان",31],
-          ["Al-Mursalat","The Emissaries","المرسلات",50],
-          ["An-Naba","The Tidings","النبأ",40],
-          ["An-Nazi'at","Those Who Drag Forth","النازعات",46],
-          ["Abasa","He Frowned","عبس",42],
-          ["At-Takwir","The Overthrowing","التكوير",29],
-          ["Al-Infitar","The Cleaving","الانفطار",19],
-          ["Al-Mutaffifin","Defrauding","المطففين",36],
-          ["Al-Inshiqaq","The Splitting Open","الانشقاق",25],
-          ["Al-Buruj","The Mansions of the Stars","البروج",22],
-          ["At-Tariq","The Nightcomer","الطارق",17],
-          ["Al-A'la","The Most High","الأعلى",19],
-          ["Al-Ghashiyah","The Overwhelming","الغاشية",26],
-          ["Al-Fajr","The Dawn","الفجر",30],
-          ["Al-Balad","The City","البلد",20],
-          ["Ash-Shams","The Sun","الشمس",15],
-          ["Al-Layl","The Night","الليل",21],
-          ["Ad-Duhaa","The Morning Hours","الضحى",11],
-          ["Ash-Sharh","The Relief","الشرح",8],
-          ["At-Tin","The Fig","التين",8],
-          ["Al-Alaq","The Clot","العلق",19],
-          ["Al-Qadr","The Power","القدر",5],
-          ["Al-Bayyinah","The Clear Proof","البينة",8],
-          ["Az-Zalzalah","The Earthquake","الزلزلة",8],
-          ["Al-Adiyat","The Courser","العاديات",11],
-          ["Al-Qari'ah","The Calamity","القارعة",11],
-          ["At-Takathur","Rivalry in World Increase","التكاثر",8],
-          ["Al-Asr","The Declining Day","العصر",3],
-          ["Al-Humazah","The Traducer","الهمزة",9],
-          ["Al-Fil","The Elephant","الفيل",5],
-          ["Quraysh","Quraysh","قريش",4],
-          ["Al-Ma'un","Small Kindnesses","الماعون",7],
-          ["Al-Kawthar","Abundance","الكوثر",3],
-          ["Al-Kafirun","The Disbelievers","الكافرون",6],
-          ["An-Nasr","Divine Support","النصر",3],
-          ["Al-Masad","The Palm Fiber","المسد",5],
-          ["Al-Ikhlas","Sincerity","الإخلاص",4],
-          ["Al-Falaq","The Daybreak","الفلق",5],
-          ["An-Nas","Mankind","الناس",6]
-        ];
-
-
-        let quranText = {};
-        let quranLoaded = false;
-
-        let currentSurah = null;
-        let currentAyah = 1;
-
-
-        const homeScreen =
-          document.getElementById("homeScreen");
-
-        const readerScreen =
-          document.getElementById("readerScreen");
-
-        const surahList =
-          document.getElementById("surahList");
-
-        const continueCard =
-          document.getElementById("continueCard");
-
-        const continueTitle =
-          document.getElementById("continueTitle");
-
-        const readerTitle =
-          document.getElementById("readerTitle");
-
-        const readerArabicName =
-          document.getElementById("readerArabicName");
-
-        const ayahContainer =
-          document.getElementById("ayahContainer");
-
-
-        async function loadQuran() {
-
-          try {
-
-            const response =
-              await fetch("quran-uthmani.txt");
-
-            if (!response.ok) {
-              throw new Error(
-                "Could not load Quran text."
-              );
-            }
-
-            const text =
-              await response.text();
-
-
-            const verses =
-              text
-                .replace(/\r/g, "")
-                .split("\n")
-                .map(line => line.trim())
-                .filter(line =>
-                  /^\d+\|\d+\|/.test(line)
-                )
-                .map(line => {
-
-                  const parts =
-                    line.split("|");
-
-                  return {
-                    surah: Number(parts[0]),
-                    ayah: Number(parts[1]),
-                    text: parts.slice(2).join("|")
-                  };
-
-                });
-
-
-            if (verses.length !== 6236) {
-
-              throw new Error(
-                "Expected 6236 ayat but found " +
-                verses.length
-              );
-
-            }
-
-
-            for (
-              let surahNumber = 1;
-              surahNumber <= 114;
-              surahNumber++
-            ) {
-
-              quranText[surahNumber] =
-                verses
-                  .filter(
-                    verse =>
-                      verse.surah === surahNumber
-                  )
-                  .sort(
-                    (a, b) =>
-                      a.ayah - b.ayah
-                  )
-                  .map(
-                    verse =>
-                      verse.text
-                  );
-
-            }
-
-
-            for (
-              let i = 0;
-              i < surahs.length;
-              i++
-            ) {
-
-              const expected =
-                surahs[i][3];
-
-              const actual =
-                quranText[i + 1].length;
-
-              if (actual !== expected) {
-
-                throw new Error(
-                  "Surah " +
-                  (i + 1) +
-                  " expected " +
-                  expected +
-                  " ayat but found " +
-                  actual
-                );
-
-              }
-
-            }
-
-
-            quranLoaded = true;
-
-            console.log(
-              "Quran loaded successfully:",
-              verses.length,
-              "ayat"
-            );
-
-
-          } catch (error) {
-
-            console.error(error);
-
-            alert(
-              "The Quran text could not be loaded. " +
-              "Please check quran-uthmani.txt."
-            );
-
-          }
-
-        }
-
-
-        function buildHome() {
-
-          surahList.innerHTML = "";
-
-
-          surahs.forEach(
-            (surah, index) => {
-
-              const number =
-                index + 1;
-
-              const row =
-                document.createElement(
-                  "div"
-                );
-
-              row.className =
-                "surah-row";
-
-              row.onclick =
-                () => openSurah(number);
-
-
-              row.innerHTML = `
-
-                <div class="surah-number">
-                  ${number}
-                </div>
-
-                <div class="surah-text">
-
-                  <div class="surah-name">
-                    ${surah[0]}
-                  </div>
-
-                  <div class="surah-meaning">
-                    ${surah[1]} · ${surah[3]} Ayat
-                  </div>
-
-                </div>
-
-                <div class="surah-arabic">
-                  ${surah[2]}
-                </div>
-
-              `;
-
-
-              surahList.appendChild(
-                row
-              );
-
-            }
-          );
-
-
-          updateContinueCard();
-
-        }
-
-
-        function openSurah(number, addHistory = true) {
-
-          if (!quranLoaded) {
-
-            alert(
-              "Quran text is still loading. Please try again."
-            );
-
-            return;
-
-          }
-
-
-          currentSurah =
-            number;
-
-        if (addHistory) {
-
-          history.pushState(
-            {
-              screen: "reader",
-              surah: number
-            },
-            "",
-            "#surah-" + number
+          surahList.appendChild(
+            row
           );
 
         }
+      );
 
-          const surah =
-            surahs[number - 1];
 
+      updateContinueCard();
 
-          localStorage.setItem(
-            "lastSurah",
-            number
-          );
+    }
 
 
-          homeScreen.classList.add(
-            "hidden"
-          );
+    function openSurah(
+      number,
+      addHistory = true
+    ) {
 
-          readerScreen.classList.remove(
-            "hidden"
-          );
+      if (!quranLoaded) {
 
-
-          readerTitle.textContent =
-            number +
-            ". " +
-            surah[0];
-
-
-          readerArabicName.textContent =
-            surah[2];
-
-
-          ayahContainer.innerHTML =
-            "";
-
-
-          const verses =
-            quranText[number];
-
-
-          verses.forEach(
-            (verse, index) => {
-
-              const ayah =
-                document.createElement(
-                  "article"
-                );
-
-              ayah.className =
-                "ayah";
-
-              ayah.dataset.ayah =
-                index + 1;
-
-
-              ayah.innerHTML = `
-
-                <div class="arabic">
-
-                  ${verse}
-
-                  <span class="ayah-number">
-                    ${index + 1}
-                  </span>
-
-                </div>
-
-              `;
-
-
-              ayahContainer.appendChild(
-                ayah
-              );
-
-            }
-          );
-
-
-          const savedAyah =
-            Number(
-              localStorage.getItem(
-                "lastAyah_" + number
-              )
-            ) || 1;
-
-
-          currentAyah =
-            savedAyah;
-
-
-          setTimeout(() => {
-
-            const target =
-              document.querySelector(
-                `.ayah[data-ayah="${savedAyah}"]`
-              );
-
-
-            if (target) {
-
-              target.scrollIntoView({
-                behavior: "auto",
-                block: "start"
-              });
-
-            } else {
-
-              window.scrollTo(
-                0,
-                0
-              );
-
-            }
-
-          }, 100);
-
-        }
-
-
-        function saveReadingPosition() {
-
-          if (!currentSurah) {
-            return;
-          }
-
-
-          const ayahs =
-            document.querySelectorAll(
-              ".ayah"
-            );
-
-
-          if (!ayahs.length) {
-            return;
-          }
-
-
-          let visibleAyah =
-            1;
-
-
-          const readingLine =
-            180;
-
-
-          for (const ayah of ayahs) {
-
-            const rect =
-              ayah.getBoundingClientRect();
-
-
-            if (
-              rect.top <= readingLine &&
-              rect.bottom > 0
-            ) {
-
-              visibleAyah =
-                Number(
-                  ayah.dataset.ayah
-                );
-
-            } else if (
-              rect.top > readingLine
-            ) {
-
-              break;
-
-            }
-
-          }
-
-
-          currentAyah =
-            visibleAyah;
-
-
-          localStorage.setItem(
-            "lastSurah",
-            currentSurah
-          );
-
-
-          localStorage.setItem(
-            "lastAyah_" + currentSurah,
-            currentAyah
-          );
-
-        }
-
-
-        let scrollTimer = null;
-
-
-        window.addEventListener(
-          "scroll",
-          () => {
-
-            clearTimeout(
-              scrollTimer
-            );
-
-            scrollTimer =
-              setTimeout(
-                saveReadingPosition,
-                100
-              );
-
-          }
+        alert(
+          "Quran text is still loading. Please try again."
         );
 
+        return;
 
-            function showHome() {
-
-              saveReadingPosition();
-
-              currentSurah =
-                null;
+      }
 
 
-              readerScreen.classList.add(
-                "hidden"
-              );
-
-              homeScreen.classList.remove(
-                "hidden"
-              );
+      currentSurah =
+        number;
 
 
-              window.scrollTo(
-                0,
-                0
-              );
+      if (addHistory) {
+
+        history.pushState(
+          {
+            screen: "reader",
+            surah: number
+          },
+          "",
+          "#surah-" + number
+        );
+
+      }
 
 
-              updateContinueCard();
+      const surah =
+        surahs[number - 1];
 
-            }
+
+      localStorage.setItem(
+        "lastSurah",
+        number
+      );
 
 
-            function goHome() {
+      homeScreen.classList.add(
+        "hidden"
+      );
 
-              if (currentSurah) {
+      readerScreen.classList.remove(
+        "hidden"
+      );
 
-                history.back();
 
-              } else {
+      readerTitle.textContent =
+        number +
+        ". " +
+        surah[0];
 
-                showHome();
 
-              }
+      readerArabicName.textContent =
+        surah[2];
 
-            }
 
-            window.addEventListener(
-              "popstate",
-              event => {
+      ayahContainer.innerHTML =
+        "";
 
-                if (
-                  event.state &&
-                  event.state.screen === "reader"
-                ) {
 
-                  const surah =
-                    Number(
-                      event.state.surah
-                    );
+      const verses =
+        quranText[number];
 
-                  openSurah(
-                    surah,
-                    false
-                  );
 
-                } else {
+      verses.forEach(
+        (verse, index) => {
 
-                  showHome();
-
-                }
-
-              }
+          const ayah =
+            document.createElement(
+              "article"
             );
 
-          saveReadingPosition();
+          ayah.className =
+            "ayah";
+
+          ayah.dataset.ayah =
+            index + 1;
 
 
-          currentSurah =
-            null;
+          ayah.innerHTML = `
+
+            <div class="arabic">
+
+              ${verse}
+
+              <span class="ayah-number">
+                ${index + 1}
+              </span>
+
+            </div>
+
+          `;
 
 
-          readerScreen.classList.add(
-            "hidden"
+          ayahContainer.appendChild(
+            ayah
           );
 
-          homeScreen.classList.remove(
-            "hidden"
+        }
+      );
+
+
+      const savedAyah =
+        Number(
+          localStorage.getItem(
+            "lastAyah_" + number
+          )
+        ) || 1;
+
+
+      currentAyah =
+        savedAyah;
+
+
+      setTimeout(() => {
+
+        const target =
+          document.querySelector(
+            `.ayah[data-ayah="${savedAyah}"]`
           );
 
+
+        if (target) {
+
+          target.scrollIntoView({
+            behavior: "auto",
+            block: "start"
+          });
+
+        } else {
 
           window.scrollTo(
             0,
             0
           );
 
-
-          updateContinueCard();
-
         }
 
+      }, 100);
 
-        function updateContinueCard() {
+    }
 
-          const lastSurah =
+
+    function saveReadingPosition() {
+
+      if (!currentSurah) {
+        return;
+      }
+
+
+      const ayahs =
+        document.querySelectorAll(
+          ".ayah"
+        );
+
+
+      if (!ayahs.length) {
+        return;
+      }
+
+
+      let visibleAyah =
+        1;
+
+      const readingLine =
+        180;
+
+
+      for (const ayah of ayahs) {
+
+        const rect =
+          ayah.getBoundingClientRect();
+
+
+        if (
+          rect.top <= readingLine &&
+          rect.bottom > 0
+        ) {
+
+          visibleAyah =
             Number(
-              localStorage.getItem(
-                "lastSurah"
-              )
+              ayah.dataset.ayah
             );
 
+        } else if (
+          rect.top > readingLine
+        ) {
 
-          if (
-            lastSurah >= 1 &&
-            lastSurah <= 114
-          ) {
-
-            const surah =
-              surahs[lastSurah - 1];
-
-
-            const lastAyah =
-              Number(
-                localStorage.getItem(
-                  "lastAyah_" + lastSurah
-                )
-              ) || 1;
-
-
-            continueCard.classList.remove(
-              "hidden"
-            );
-
-
-            continueTitle.textContent =
-              surah[0] +
-              " · Ayah " +
-              lastAyah;
-
-          } else {
-
-            continueCard.classList.add(
-              "hidden"
-            );
-
-          }
+          break;
 
         }
 
-
-        function continueReading() {
-
-          const lastSurah =
-            Number(
-              localStorage.getItem(
-                "lastSurah"
-              )
-            );
+      }
 
 
-          if (
-            lastSurah >= 1 &&
-            lastSurah <= 114
-          ) {
-
-            openSurah(
-              lastSurah
-            );
-
-          }
-
-        }
+      currentAyah =
+        visibleAyah;
 
 
-        async function startApp() {
+      localStorage.setItem(
+        "lastSurah",
+        currentSurah
+      );
 
-            history.replaceState(
-              {
-                screen: "home"
-              },
-              "",
-              window.location.pathname
-            );
 
-          localStorage.removeItem(
-            "lastPositionSurah"
+      localStorage.setItem(
+        "lastAyah_" + currentSurah,
+        currentAyah
+      );
+
+    }
+
+
+    window.addEventListener(
+      "scroll",
+      () => {
+
+        clearTimeout(
+          scrollTimer
+        );
+
+        scrollTimer =
+          setTimeout(
+            saveReadingPosition,
+            100
           );
 
-          localStorage.removeItem(
-            "lastScrollPosition"
+      }
+    );
+
+
+    function showHome() {
+
+      saveReadingPosition();
+
+
+      currentSurah =
+        null;
+
+
+      readerScreen.classList.add(
+        "hidden"
+      );
+
+      homeScreen.classList.remove(
+        "hidden"
+      );
+
+
+      window.scrollTo(
+        0,
+        0
+      );
+
+
+      updateContinueCard();
+
+    }
+
+
+    function goHome() {
+
+      if (currentSurah) {
+
+        history.back();
+
+      } else {
+
+        showHome();
+
+      }
+
+    }
+
+
+    window.addEventListener(
+      "popstate",
+      event => {
+
+        if (
+          event.state &&
+          event.state.screen === "reader"
+        ) {
+
+          const surah =
+            Number(
+              event.state.surah
+            );
+
+
+          openSurah(
+            surah,
+            false
           );
 
+        } else {
 
-          await loadQuran();
-
-          buildHome();
+          showHome();
 
         }
 
+      }
+    );
 
-        startApp();
 
-      </script>
+    function updateContinueCard() {
 
-    </body>
-    </html>
+      const lastSurah =
+        Number(
+          localStorage.getItem(
+            "lastSurah"
+          )
+        );
+
+
+      if (
+        lastSurah >= 1 &&
+        lastSurah <= 114
+      ) {
+
+        const surah =
+          surahs[lastSurah - 1];
+
+
+        const lastAyah =
+          Number(
+            localStorage.getItem(
+              "lastAyah_" + lastSurah
+            )
+          ) || 1;
+
+
+        continueCard.classList.remove(
+          "hidden"
+        );
+
+
+        continueTitle.textContent =
+          surah[0] +
+          " · Ayah " +
+          lastAyah;
+
+      } else {
+
+        continueCard.classList.add(
+          "hidden"
+        );
+
+      }
+
+    }
+
+
+    function continueReading() {
+
+      const lastSurah =
+        Number(
+          localStorage.getItem(
+            "lastSurah"
+          )
+        );
+
+
+      if (
+        lastSurah >= 1 &&
+        lastSurah <= 114
+      ) {
+
+        openSurah(
+          lastSurah
+        );
+
+      }
+
+    }
+
+
+    async function startApp() {
+
+      history.replaceState(
+        {
+          screen: "home"
+        },
+        "",
+        window.location.pathname
+      );
+
+
+      localStorage.removeItem(
+        "lastPositionSurah"
+      );
+
+      localStorage.removeItem(
+        "lastScrollPosition"
+      );
+
+
+      await loadQuran();
+
+      buildHome();
+
+    }
+
+
+    startApp();
+
+  </script>
+
+</body>
+</html>
